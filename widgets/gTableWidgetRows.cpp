@@ -71,7 +71,7 @@ void gTableWidgetRows::copyRow(int row) {
     auto row_count = m_parent->rowCount();
 
     if ((0 <= row) && (row < row_count)) {
-        m_clipboard = at(row)->values();
+        m_clipboard = at(row)->cellData();
     }
 }
 
@@ -81,7 +81,7 @@ void gTableWidgetRows::pasteRow(int row) {
     }
 
     auto* item = new gTableWidgetRow(this, f_setupRow);
-    item->setValues(m_clipboard);
+    item->setCellData(m_clipboard);
     insertRow(row, item);
 }
 
@@ -99,28 +99,130 @@ void gTableWidgetRows::moveDownRow(int row) {
     m_clipboard = temp;
 }
 
-void gTableWidgetRows::connectRowToTable(int row) {
-    auto row_ptr = at(row);
+QStringList gTableWidgetRows::getCellDataByColumn(int col) const {
+    QStringList list;
 
-    auto N = row_ptr->count();
-    for (decltype(N) col{0}; col < N; ++col) {
-        auto _item = row_ptr->at(col);
+    auto N = count();
+    for (decltype(N) i{0}; i < N; ++i) {
+        auto* item_ptr = at(i)->at(col);
 
-        switch (_item->type()) {
+        switch (item_ptr->type()) {
             case gTableWidgetBase::ITEM: {
-                m_parent->setItem(row, col, _item->toItem());
+                list.append(item_ptr->toItem()->text());
             } break;
 
             case gTableWidgetBase::CELL: {
-                m_parent->setCellWidget(row, col, _item->toCell());
+                list.append(item_ptr->toCell()->title());
             } break;
 
             case gTableWidgetBase::CBOX: {
-                m_parent->setCellWidget(row, col, _item->toCBox());
+                list.append(item_ptr->toCBox()->index());
             } break;
 
             case gTableWidgetBase::DATE: {
-                m_parent->setCellWidget(row, col, _item->toDate());
+                list.append(item_ptr->toDate()->date());
+            } break;
+
+            case gTableWidgetBase::ICON: {
+                list.append(item_ptr->toIcon()->index());
+            } break;
+
+            default: {
+                // ERROR: wrong condition detected.
+            } break;
+        }
+    }
+
+    return list;
+}
+
+QStringList gTableWidgetRows::zipCellDataByColumn(int col) const {
+    QStringList list = getCellDataByColumn(col);
+
+    for (int i = 0; i < list.count(); ++i) {
+        auto data = list.at(i);
+
+        while (true) {
+            int p = list.lastIndexOf(data);
+            if (p == i) {
+                break;
+            }
+            list.remove(p);
+        }
+    }
+
+    return list;
+}
+
+QList<gTableWidgetRow*> gTableWidgetRows::filterRows(int col, const QString& data) const {
+    QList<gTableWidgetRow*> list;
+
+    auto N = count();
+    for (decltype(N) i{0}; i < N; ++i) {
+        auto* row_ptr  = at(i);
+        auto* item_ptr = row_ptr->at(col);
+
+        switch (item_ptr->type()) {
+            case gTableWidgetBase::ITEM: {
+                if (data == item_ptr->toItem()->text())
+                    list.append(row_ptr);
+            } break;
+
+            case gTableWidgetBase::CELL: {
+                if (data == item_ptr->toCell()->title())
+                    list.append(row_ptr);
+            } break;
+
+            case gTableWidgetBase::CBOX: {
+                if (data == item_ptr->toCBox()->index())
+                    list.append(row_ptr);
+            } break;
+
+            case gTableWidgetBase::DATE: {
+                if (data == item_ptr->toDate()->date())
+                    list.append(row_ptr);
+            } break;
+
+            case gTableWidgetBase::ICON: {
+                if (data == item_ptr->toIcon()->index())
+                    list.append(row_ptr);
+            } break;
+
+            default: {
+                // ERROR: wrong condition detected.
+            } break;
+        }
+    }
+
+    return list;
+}
+
+void gTableWidgetRows::connectRowToTable(int row) {
+    auto* row_ptr = at(row);
+
+    auto N = row_ptr->count();
+    for (decltype(N) col{0}; col < N; ++col) {
+        auto item_ptr = row_ptr->at(col);
+
+        switch (item_ptr->type()) {
+            case gTableWidgetBase::ITEM: {
+                m_parent->setItem(row, col, item_ptr->toItem());
+            } break;
+
+            case gTableWidgetBase::CELL: {
+                m_parent->setCellWidget(row, col, item_ptr->toCell());
+            } break;
+
+            case gTableWidgetBase::CBOX: {
+                m_parent->setCellWidget(row, col, item_ptr->toCBox());
+            } break;
+
+            case gTableWidgetBase::DATE: {
+                m_parent->setCellWidget(row, col, item_ptr->toDate());
+            } break;
+
+            case gTableWidgetBase::ICON: {
+                m_parent->setCellWidget(row, col, item_ptr->toIcon());
             } break;
 
             default: {

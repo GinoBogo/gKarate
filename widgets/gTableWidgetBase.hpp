@@ -20,6 +20,7 @@ class gTableWidgetItem;
 class gTableWidgetCell;
 class gTableWidgetCBox;
 class gTableWidgetDate;
+class gTableWidgetIcon;
 
 class gTableWidgetBase {
 
@@ -29,6 +30,7 @@ class gTableWidgetBase {
         CELL = 0b10000000,
         CBOX = 0b00000001 | CELL,
         DATE = 0b00000010 | CELL,
+        ICON = 0b00000100 | CELL,
     };
     Q_DECLARE_FLAGS(BaseType, base_type);
 
@@ -36,15 +38,11 @@ class gTableWidgetBase {
 
     gTableWidgetBase(BaseType type, void* widget);
 
-    bool isItem() { return m_type.testFlag(ITEM); }
-    bool isCell() { return m_type.testFlag(CELL); }
-    bool isCBox() { return m_type.testFlag(CBOX); }
-    bool isDate() { return m_type.testFlag(DATE); }
-
     gTableWidgetItem* toItem() { return (gTableWidgetItem*)m_widget; }
     gTableWidgetCell* toCell() { return (gTableWidgetCell*)m_widget; }
     gTableWidgetCBox* toCBox() { return (gTableWidgetCBox*)m_widget; }
     gTableWidgetDate* toDate() { return (gTableWidgetDate*)m_widget; }
+    gTableWidgetIcon* toIcon() { return (gTableWidgetIcon*)m_widget; }
 
     BaseType type() { return m_type; }
 

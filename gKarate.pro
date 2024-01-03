@@ -28,6 +28,7 @@ HEADERS += gMainWidget.hpp \
            widgets/gTableWidgetCBox.hpp \
            widgets/gTableWidgetCell.hpp \
            widgets/gTableWidgetDate.hpp \
+           widgets/gTableWidgetIcon.hpp \
            widgets/gTableWidgetItem.hpp \
            widgets/gTableWidgetRow.hpp \
            widgets/gTableWidgetRows.hpp
@@ -48,6 +49,7 @@ SOURCES += main.cpp \
            widgets/gTableWidgetCBox.cpp \
            widgets/gTableWidgetCell.cpp \
            widgets/gTableWidgetDate.cpp \
+           widgets/gTableWidgetIcon.cpp \
            widgets/gTableWidgetItem.cpp \
            widgets/gTableWidgetRow.cpp \
            widgets/gTableWidgetRows.cpp

@@ -39,12 +39,19 @@ class gMainWidget : public QWidget {
     void slotButton_MakeKata();
     void slotButton_MakeKumite();
 
+    void slotComboBox_ReferenceKata(const QString& text);
+    void slotComboBox_ReferenceKumite(const QString& text);
+
   private:
     void    updateWindowTitle();
     QString getAppPath() const;
     QString addAppPath(const QString& filename) const;
     void    openConfig(const QString& filename);
     void    saveConfig(const QString& filename);
+
+    void clearTab1_Match();
+    void clearTab2_Kata();
+    void clearTab3_Kumite();
 
   private:
     Ui::gMainWidget* ui;

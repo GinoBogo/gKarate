@@ -16,5 +16,6 @@
 #include "widgets/gTableWidgetRow.hpp"
 
 void setupRow_People(gTableWidgetRow* row_ptr);
+void setupRow_PeopleKata(gTableWidgetRow* row_ptr);
 
 #endif // TABLEWIDGETSETUP_HPP

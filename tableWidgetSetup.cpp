@@ -55,7 +55,6 @@ void setupRow_People(gTableWidgetRow* row_ptr) {
              QPixmap(":/res/images/beld_black.png")};
 
         auto N = items.at(4)->toCBox()->images().count();
-
         items.at(4)->toCBox()->setIconSize(QSize(64, 24));
         items.at(4)->toCBox()->resize(N);
         items.at(4)->toCBox()->setupUi();
@@ -65,6 +64,45 @@ void setupRow_People(gTableWidgetRow* row_ptr) {
 
         items.at(8)->toItem()->setText("1");
         items.at(8)->toItem()->setTextAlignment(Qt::AlignCenter);
+
+        foreach (auto* item, items) {
+            row_ptr->append(item);
+        }
+    }
+}
+
+void setupRow_PeopleKata(gTableWidgetRow* row_ptr) {
+    if (row_ptr != nullptr) {
+        // NOTE: automatic downcasting
+        QList<gTableWidgetBase*> items = //
+            {
+                new gTableWidgetItem(row_ptr), // 0 Cognome
+                new gTableWidgetItem(row_ptr), // 1 Nome
+                new gTableWidgetItem(row_ptr), // 2 Categoria
+                new gTableWidgetIcon(row_ptr), // 3 Grado
+                new gTableWidgetItem(row_ptr), // 4 Società
+                new gTableWidgetItem(row_ptr), // 5 Stile
+            };
+
+        // items.at(0)->toItem()->setFlags(Qt::ItemIsEnabled);
+        items.at(2)->toItem()->setTextAlignment(Qt::AlignCenter);
+
+        items.at(3)->toIcon()->images() = //
+            {QPixmap(":/res/images/beld_white.png"),
+             QPixmap(":/res/images/beld_white_yellow.png"),
+             QPixmap(":/res/images/beld_yellow.png"),
+             QPixmap(":/res/images/beld_yellow_orange.png"),
+             QPixmap(":/res/images/beld_orange.png"),
+             QPixmap(":/res/images/beld_orange_green.png"),
+             QPixmap(":/res/images/beld_green.png"),
+             QPixmap(":/res/images/beld_green_blue.png"),
+             QPixmap(":/res/images/beld_blue.png"),
+             QPixmap(":/res/images/beld_blue_brown.png"),
+             QPixmap(":/res/images/beld_brown.png"),
+             QPixmap(":/res/images/beld_brown_black.png"),
+             QPixmap(":/res/images/beld_black.png")};
+
+        items.at(5)->toItem()->setTextAlignment(Qt::AlignCenter);
 
         foreach (auto* item, items) {
             row_ptr->append(item);

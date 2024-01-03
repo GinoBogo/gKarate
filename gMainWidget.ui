@@ -34,7 +34,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_1_match">
       <attribute name="title">
@@ -627,7 +627,7 @@
            </layout>
           </item>
           <item>
-           <widget class="gTableWidget" name="tableWidget_KataPeople">
+           <widget class="gTableWidget" name="tableWidget_peopleKata">
             <attribute name="horizontalHeaderMinimumSectionSize">
              <number>48</number>
             </attribute>
@@ -715,7 +715,7 @@
   <tabstop>pushButton_ExportKata</tabstop>
   <tabstop>pushButton_ReorderKata</tabstop>
   <tabstop>pushButton_PrintKata</tabstop>
-  <tabstop>tableWidget_KataPeople</tabstop>
+  <tabstop>tableWidget_peopleKata</tabstop>
  </tabstops>
  <resources>
   <include location="main.qrc"/>
@@ -801,6 +801,70 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>tableWidget_peopleKata</sender>
+   <signal>customContextMenuRequested(QPoint)</signal>
+   <receiver>tableWidget_peopleKata</receiver>
+   <slot>slotCustomContextMenu(QPoint)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>449</x>
+     <y>355</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>449</x>
+     <y>355</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_MakeKata</sender>
+   <signal>clicked()</signal>
+   <receiver>gMainWidget</receiver>
+   <slot>slotButton_MakeKata()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>795</x>
+     <y>76</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>449</x>
+     <y>337</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_MakeKumite</sender>
+   <signal>clicked()</signal>
+   <receiver>gMainWidget</receiver>
+   <slot>slotButton_MakeKumute()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>795</x>
+     <y>118</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>449</x>
+     <y>337</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboBox_ReferenceKata</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>gMainWidget</receiver>
+   <slot>slotComboBox_ReferenceKata(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>102</x>
+     <y>75</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>449</x>
+     <y>337</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>slotButton_FileNew()</slot>
@@ -809,5 +873,7 @@
   <slot>slotButton_MakeKata()</slot>
   <slot>slotButton_MakeKumute()</slot>
   <slot>slotButton_MatchDate()</slot>
+  <slot>slotComboBox_ReferenceKata(QString)</slot>
+  <slot>slotComboBox_ReferenceKumite(QString)</slot>
  </slots>
 </ui>

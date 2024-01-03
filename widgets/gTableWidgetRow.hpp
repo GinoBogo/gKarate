@@ -17,6 +17,7 @@
 #include "gTableWidgetCBox.hpp"
 #include "gTableWidgetCell.hpp"
 #include "gTableWidgetDate.hpp"
+#include "gTableWidgetIcon.hpp"
 #include "gTableWidgetItem.hpp"
 
 #include <QStringList>
@@ -33,8 +34,8 @@ class gTableWidgetRow : public QList<gTableWidgetBase*> {
 
     void clearAll();
 
-    QStringList values();
-    void        setValues(const QStringList& values);
+    QStringList cellData();
+    void        setCellData(const QStringList& cellData);
 
   private:
     gTableWidgetRows* m_parent;

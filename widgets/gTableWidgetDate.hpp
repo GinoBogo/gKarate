@@ -25,7 +25,7 @@ class gTableWidgetDate : public gTableWidgetBase, public QDateEdit {
   public:
     gTableWidgetDate(gTableWidgetRow* parent);
 
-    QString date();
+    QString date() const;
     void    setDate(const QString& value);
 
     static const QString date2str(const QDate& date);

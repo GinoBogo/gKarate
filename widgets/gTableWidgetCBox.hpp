@@ -30,8 +30,10 @@ class gTableWidgetCBox : public gTableWidgetBase, public QComboBox {
 
     QList<QPixmap>&  images() { return m_images; }
     const QLineEdit& lineEdit() { return m_line_edit; }
-    const QString    index() { return QString::number(currentIndex()); }
-    void             setIndex(const QString& value) { setCurrentIndex(value.toInt()); }
+    QString          index() const { return QString::number(currentIndex()); }
+    void             setIndex(const QString& data) { setCurrentIndex(data.toInt()); }
+    QString          text() const { return currentText(); }
+    void             setText(const QString& data) { setCurrentText(data); }
 
   private:
     gTableWidgetRow* m_parent;

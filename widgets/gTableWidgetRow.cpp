@@ -31,8 +31,8 @@ void gTableWidgetRow::clearAll() {
     clear();
 }
 
-QStringList gTableWidgetRow::values() {
-    QStringList values;
+QStringList gTableWidgetRow::cellData() {
+    QStringList cellData;
 
     auto N = this->count();
     for (decltype(N) i{0}; i < N; ++i) {
@@ -40,19 +40,23 @@ QStringList gTableWidgetRow::values() {
 
         switch (_item->type()) {
             case gTableWidgetBase::ITEM: {
-                values.append(_item->toItem()->text());
+                cellData.append(_item->toItem()->text());
             } break;
 
             case gTableWidgetBase::CELL: {
-                values.append(_item->toCell()->title());
+                cellData.append(_item->toCell()->title());
             } break;
 
             case gTableWidgetBase::DATE: {
-                values.append(_item->toDate()->date());
+                cellData.append(_item->toDate()->date());
             } break;
 
             case gTableWidgetBase::CBOX: {
-                values.append(_item->toCBox()->index());
+                cellData.append(_item->toCBox()->index());
+            } break;
+
+            case gTableWidgetBase::ICON: {
+                cellData.append(_item->toIcon()->index());
             } break;
 
             default: {
@@ -61,10 +65,10 @@ QStringList gTableWidgetRow::values() {
         }
     }
 
-    return values;
+    return cellData;
 }
 
-void gTableWidgetRow::setValues(const QStringList& values) {
+void gTableWidgetRow::setCellData(const QStringList& cellData) {
 
     auto N = this->count();
     for (decltype(N) i{0}; i < N; ++i) {
@@ -72,19 +76,23 @@ void gTableWidgetRow::setValues(const QStringList& values) {
 
         switch (_item->type()) {
             case gTableWidgetBase::ITEM: {
-                _item->toItem()->setText(values.at(i));
+                _item->toItem()->setText(cellData.at(i));
             } break;
 
             case gTableWidgetBase::CELL: {
-                _item->toCell()->setTitle(values.at(i));
+                _item->toCell()->setTitle(cellData.at(i));
             } break;
 
             case gTableWidgetBase::DATE: {
-                _item->toDate()->setDate(values.at(i));
+                _item->toDate()->setDate(cellData.at(i));
             } break;
 
             case gTableWidgetBase::CBOX: {
-                _item->toCBox()->setIndex(values.at(i));
+                _item->toCBox()->setIndex(cellData.at(i));
+            } break;
+
+            case gTableWidgetBase::ICON: {
+                _item->toIcon()->setIndex(cellData.at(i));
             } break;
 
             default: {

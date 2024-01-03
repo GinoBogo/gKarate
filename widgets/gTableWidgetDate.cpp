@@ -24,7 +24,7 @@ gTableWidgetDate::gTableWidgetDate(gTableWidgetRow* parent) : gTableWidgetBase(D
     connect(this, &QDateEdit::dateChanged, this, &gTableWidgetDate::slotDateChanged);
 }
 
-QString gTableWidgetDate::date() {
+QString gTableWidgetDate::date() const {
     auto date = date2str(QDateEdit::date());
     return date;
 }

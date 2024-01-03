@@ -26,7 +26,7 @@ gMainWidget::gMainWidget(QWidget* parent) : QWidget(parent), ui(new Ui::gMainWid
     ui->tabWidget->setStyleSheet("QTabBar::tab { width: 160px; }");
     ui->tabWidget->setCurrentIndex(0);
 
-    QStringList names = {
+    QStringList menu_names = {
         "Aggiungi Atleta",   // Insert
         "Rimuovi Atleta",    // Remove
         "Elimina Elenco",    // Clear
@@ -38,8 +38,12 @@ gMainWidget::gMainWidget(QWidget* parent) : QWidget(parent), ui(new Ui::gMainWid
     };
 
     ui->tableWidget_people->setupUi();
-    ui->tableWidget_people->renameMenuNames(names);
+    ui->tableWidget_people->renameMenuNames(menu_names);
     ui->tableWidget_people->rows()->setupRow(setupRow_People);
+
+    ui->tableWidget_peopleKata->setupUi();
+    ui->tableWidget_peopleKata->renameMenuNames(menu_names);
+    ui->tableWidget_peopleKata->rows()->setupRow(setupRow_PeopleKata);
 
     m_document  = "senza nome";
     m_directory = getAppPath();
@@ -120,6 +124,19 @@ void gMainWidget::openConfig(const QString& filename) {
                 }
             }
         }
+
+        { // SECTION: "tab_widget_people_kata"
+            gXmlNode* node = xmlFile.findNode(node_2, "tab_widget_people_kata");
+
+            if (node != nullptr) {
+                foreach (gXmlNode* child, node->children) {
+                    auto name = xmlFile.getAttribute(child, "name");
+                    auto size = xmlFile.getAttribute(child, "size").toInt();
+
+                    (void)ui->tableWidget_peopleKata->setHeaderSize(name, size);
+                }
+            }
+        }
     }
 }
 
@@ -153,7 +170,22 @@ void gMainWidget::saveConfig(const QString& filename) {
         const auto& headerSizes = ui->tableWidget_people->headerSizes();
 
         auto N = headerNames.count();
+        for (decltype(N) i{0}; i < N; ++i) {
+            const auto& name = QString("header_%1").arg(i, 2, 10, QChar('0'));
 
+            auto* node_i = xmlFile.insertNode(node, name);
+            node_i->attributes.append(gXmlPair("name", headerNames.at(i)));
+            node_i->attributes.append(gXmlPair("size", headerSizes.at(i)));
+        }
+    }
+
+    { // SECTION: "tab_widget_people_kata"
+        gXmlNode* node = xmlFile.insertNode(node_2, "tab_widget_people_kata");
+
+        const auto& headerNames = ui->tableWidget_peopleKata->headerNames();
+        const auto& headerSizes = ui->tableWidget_peopleKata->headerSizes();
+
+        auto N = headerNames.count();
         for (decltype(N) i{0}; i < N; ++i) {
             const auto& name = QString("header_%1").arg(i, 2, 10, QChar('0'));
 
@@ -165,6 +197,22 @@ void gMainWidget::saveConfig(const QString& filename) {
 
     (void)xmlFile.save(filename);
 }
+
+void gMainWidget::clearTab1_Match() {
+    ui->lineEdit_match_name->setText("");
+    ui->lineEdit_match_site->setText("");
+    ui->lineEdit_match_date->setText("");
+
+    ui->tableWidget_people->rows()->clearAll();
+}
+
+void gMainWidget::clearTab2_Kata() {
+    ui->comboBox_ReferenceKata->clear();
+
+    ui->tableWidget_peopleKata->rows()->clearAll();
+}
+
+void gMainWidget::clearTab3_Kumite() {}
 
 void gMainWidget::slotButton_MatchDate() {
     auto date = QDate::currentDate();
@@ -187,11 +235,9 @@ void gMainWidget::slotButton_FileNew() {
     m_document = "senza nome";
     updateWindowTitle();
 
-    ui->lineEdit_match_name->setText("");
-    ui->lineEdit_match_site->setText("");
-    ui->lineEdit_match_date->setText("");
-
-    ui->tableWidget_people->rows()->clearAll();
+    clearTab1_Match();
+    clearTab2_Kata();
+    clearTab3_Kumite();
 }
 
 void gMainWidget::slotButton_FileOpen() {
@@ -203,6 +249,10 @@ void gMainWidget::slotButton_FileOpen() {
 
         if (xmlFile.open(filepath)) {
             updateWindowTitle();
+
+            clearTab1_Match();
+            clearTab2_Kata();
+            clearTab3_Kumite();
 
             gXmlNode* node_0 = nullptr;
 
@@ -227,8 +277,6 @@ void gMainWidget::slotButton_FileOpen() {
                 gXmlNode* node_1 = xmlFile.findNode(node_0, "group_people");
 
                 auto* rows = ui->tableWidget_people->rows();
-
-                rows->clearAll();
 
                 auto nodes = xmlFile.findNodes(node_1, "athlete");
 
@@ -311,6 +359,47 @@ void gMainWidget::slotButton_FileSave() {
     }
 }
 
-void gMainWidget::slotButton_MakeKata() {}
+void gMainWidget::slotButton_MakeKata() {
+    const auto* rows = ui->tableWidget_people->rows();
+
+    auto references = rows->zipCellDataByColumn(8);
+
+    if (references.count() > 0) {
+        ui->comboBox_ReferenceKata->clear();
+        ui->comboBox_ReferenceKata->addItems(references);
+
+        ui->tabWidget->setCurrentIndex(1);
+    }
+}
 
 void gMainWidget::slotButton_MakeKumite() {}
+
+void gMainWidget::slotComboBox_ReferenceKata(const QString& text) {
+    const auto* rows      = ui->tableWidget_people->rows();
+    auto*       rows_kata = ui->tableWidget_peopleKata->rows();
+
+    rows_kata->clearAll();
+
+    auto group = rows->filterRows(8, text);
+
+    auto N = group.count();
+    for (decltype(N) i{0}; i < N; ++i) {
+        auto* row_ptr = group.at(i);
+
+        auto* item = new gTableWidgetRow(rows_kata, setupRow_PeopleKata);
+        // clang-format off
+        item->at(0)->toItem()->setText (row_ptr->at(0)->toItem()->text() ); // Cognome
+        item->at(1)->toItem()->setText (row_ptr->at(1)->toItem()->text() ); // Nome
+        item->at(2)->toItem()->setText (row_ptr->at(3)->toCBox()->text() ); // Categoria
+        item->at(3)->toIcon()->setIndex(row_ptr->at(4)->toCBox()->index()); // Grado
+        item->at(4)->toItem()->setText (row_ptr->at(7)->toItem()->text() ); // Società
+        item->at(5)->toItem()->setText (row_ptr->at(6)->toCBox()->text() ); // Stile
+        // clang-format on
+
+        rows_kata->insertRow(i, item);
+    }
+}
+
+void gMainWidget::slotComboBox_ReferenceKumite(const QString& text) {
+    (void)text;
+}
