@@ -1,0 +1,27 @@
+<RCC>
+    <qresource prefix="/res">
+        <file>icons/calendar.png</file>
+        <file>icons/menu_insert.png</file>
+        <file>icons/menu_remove.png</file>
+        <file>icons/menu_clear.png</file>
+        <file>icons/menu_copy.png</file>
+        <file>icons/menu_paste.png</file>
+        <file>icons/menu_move_up.png</file>
+        <file>icons/menu_move_down.png</file>
+        <file>icons/menu_cut.png</file>
+        <file>images/beld_white.png</file>
+        <file>images/beld_white_yellow.png</file>
+        <file>images/beld_yellow.png</file>
+        <file>images/beld_yellow_orange.png</file>
+        <file>images/beld_green.png</file>
+        <file>images/beld_green_blue.png</file>
+        <file>images/beld_orange.png</file>
+        <file>images/beld_orange_green.png</file>
+        <file>images/beld_blue.png</file>
+        <file>images/beld_blue_brown.png</file>
+        <file>images/beld_brown.png</file>
+        <file>images/beld_brown_black.png</file>
+        <file>images/beld_black.png</file>
+        <file>images/splash.png</file>
+    </qresource>
+</RCC>
