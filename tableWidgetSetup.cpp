@@ -12,7 +12,34 @@
 
 #include "tableWidgetSetup.hpp"
 
-void setupRow_People(gTableWidgetRow* row_ptr) {
+const char* RANK_MAP[] = {
+    "BIANCA",           //  0
+    "BIANCA-GIALLA",    //  1
+    "GIALLA",           //  2
+    "GIALLA-ARANCIONE", //  3
+    "ARANCIONE",        //  4
+    "ARANCIONE-VERDE",  //  5
+    "VERDE",            //  6
+    "VERDE-BLU",        //  7
+    "BLU",              //  8
+    "BLU-MARRONE",      //  9
+    "MARRONE",          // 10
+    "MARRONE-NERA",     // 11
+    "NERA"              // 12
+};
+
+QStringList setup_menu_names = {
+    "Aggiungi Atleta",   // Insert
+    "Rimuovi Atleta",    // Remove
+    "Elimina Elenco",    // Clear
+    "Copia Riga",        // Copy
+    "Taglia Riga",       // Cut
+    "Incolla Riga",      // Paste
+    "Sposta Riga Sopra", // Move Up
+    "Sposta Riga Sotto"  // Move Down
+};
+
+void setupRow_Full(gTableWidgetRow* row_ptr) {
     if (row_ptr != nullptr) {
         // NOTE: automatic downcasting
         QList<gTableWidgetBase*> items =     //
@@ -71,7 +98,7 @@ void setupRow_People(gTableWidgetRow* row_ptr) {
     }
 }
 
-void setupRow_PeopleKata(gTableWidgetRow* row_ptr) {
+void setupRow_Mini(gTableWidgetRow* row_ptr) {
     if (row_ptr != nullptr) {
         // NOTE: automatic downcasting
         QList<gTableWidgetBase*> items = //

@@ -40,8 +40,8 @@ class gTableWidgetRows : public QList<gTableWidgetRow*> {
     void moveUpRow(int row);
     void moveDownRow(int row);
 
-    QStringList getCellDataByColumn(int col) const;
-    QStringList zipCellDataByColumn(int col) const;
+    QList<QStringList> cellsData();
+    void               setCellsData(const QList<QStringList>& list);
 
     QList<gTableWidgetRow*> filterRows(int col, const QString& data) const;
 

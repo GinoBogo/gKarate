@@ -28,11 +28,11 @@ gTableWidgetRows::~gTableWidgetRows() {
 
 void gTableWidgetRows::clearAll() {
     auto N = count();
-
     while (N-- > 0) {
         delete takeAt(0);
         m_parent->removeRow(0);
     }
+    clear();
 }
 
 void gTableWidgetRows::insertRow(int row, gTableWidgetRow* item) {
@@ -99,59 +99,22 @@ void gTableWidgetRows::moveDownRow(int row) {
     m_clipboard = temp;
 }
 
-QStringList gTableWidgetRows::getCellDataByColumn(int col) const {
-    QStringList list;
+QList<QStringList> gTableWidgetRows::cellsData() {
+    QList<QStringList> list;
 
     auto N = count();
     for (decltype(N) i{0}; i < N; ++i) {
-        auto* item_ptr = at(i)->at(col);
-
-        switch (item_ptr->type()) {
-            case gTableWidgetBase::ITEM: {
-                list.append(item_ptr->toItem()->text());
-            } break;
-
-            case gTableWidgetBase::CELL: {
-                list.append(item_ptr->toCell()->title());
-            } break;
-
-            case gTableWidgetBase::CBOX: {
-                list.append(item_ptr->toCBox()->index());
-            } break;
-
-            case gTableWidgetBase::DATE: {
-                list.append(item_ptr->toDate()->date());
-            } break;
-
-            case gTableWidgetBase::ICON: {
-                list.append(item_ptr->toIcon()->index());
-            } break;
-
-            default: {
-                // ERROR: wrong condition detected.
-            } break;
-        }
+        list.append(at(i)->cellData());
     }
 
     return list;
 }
 
-QStringList gTableWidgetRows::zipCellDataByColumn(int col) const {
-    QStringList list = getCellDataByColumn(col);
-
-    for (int i = 0; i < list.count(); ++i) {
-        auto data = list.at(i);
-
-        while (true) {
-            int p = list.lastIndexOf(data);
-            if (p == i) {
-                break;
-            }
-            list.remove(p);
-        }
+void gTableWidgetRows::setCellsData(const QList<QStringList>& list) {
+    auto N = count();
+    for (decltype(N) i{0}; i < N; ++i) {
+        at(i)->setCellData(list.at(i));
     }
-
-    return list;
 }
 
 QList<gTableWidgetRow*> gTableWidgetRows::filterRows(int col, const QString& data) const {

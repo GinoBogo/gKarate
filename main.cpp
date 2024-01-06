@@ -29,7 +29,7 @@ int main(int argc, char* argv[]) {
 
     QPixmap pixmap(":/res/images/splash.png");
 
-    QSplashScreen splash(pixmap);
+    QSplashScreen splash(pixmap, Qt::WindowStaysOnTopHint);
 
     splash.show();
 

@@ -14,10 +14,14 @@
 #include "ui_gMainWidget.h"
 
 #include "libs/gXmlFile.hpp"
+#include "tableWidgetExport.hpp"
 #include "tableWidgetSetup.hpp"
 
 #include <QByteArray>
 #include <QDir>
+
+#include <algorithm>
+#include <random>
 
 gMainWidget::gMainWidget(QWidget* parent) : QWidget(parent), ui(new Ui::gMainWidget) {
 
@@ -26,24 +30,19 @@ gMainWidget::gMainWidget(QWidget* parent) : QWidget(parent), ui(new Ui::gMainWid
     ui->tabWidget->setStyleSheet("QTabBar::tab { width: 160px; }");
     ui->tabWidget->setCurrentIndex(0);
 
-    QStringList menu_names = {
-        "Aggiungi Atleta",   // Insert
-        "Rimuovi Atleta",    // Remove
-        "Elimina Elenco",    // Clear
-        "Copia Riga",        // Copy
-        "Taglia Riga",       // Cut
-        "Incolla Riga",      // Paste
-        "Sposta Riga Sopra", // Move Up
-        "Sposta Riga Sotto"  // Move Down
-    };
-
     ui->tableWidget_people->setupUi();
-    ui->tableWidget_people->renameMenuNames(menu_names);
-    ui->tableWidget_people->rows()->setupRow(setupRow_People);
+    ui->tableWidget_people->renameMenuNames(setup_menu_names);
+    ui->tableWidget_people->rows()->setupRow(setupRow_Full);
 
     ui->tableWidget_peopleKata->setupUi();
-    ui->tableWidget_peopleKata->renameMenuNames(menu_names);
-    ui->tableWidget_peopleKata->rows()->setupRow(setupRow_PeopleKata);
+    ui->tableWidget_peopleKata->renameMenuNames(setup_menu_names);
+    ui->tableWidget_peopleKata->rows()->setupRow(setupRow_Mini);
+    ui->tableWidget_peopleKata->setContextMenuPolicy(Qt::NoContextMenu);
+
+    ui->tableWidget_peopleKumite->setupUi();
+    ui->tableWidget_peopleKumite->renameMenuNames(setup_menu_names);
+    ui->tableWidget_peopleKumite->rows()->setupRow(setupRow_Mini);
+    ui->tableWidget_peopleKumite->setContextMenuPolicy(Qt::NoContextMenu);
 
     m_document  = "senza nome";
     m_directory = getAppPath();
@@ -51,11 +50,14 @@ gMainWidget::gMainWidget(QWidget* parent) : QWidget(parent), ui(new Ui::gMainWid
 
     m_openDialog = new gFileDialog(this, QFileDialog::AcceptOpen);
     m_saveDialog = new gFileDialog(this, QFileDialog::AcceptSave);
+    m_saveExport = new gFileDialog(this, QFileDialog::AcceptSave);
     m_openDialog->setFont(this->font());
     m_saveDialog->setFont(this->font());
+    m_saveExport->setFont(this->font());
 
     m_openDialog->filters.insert(0, "Dojo files (*.dojo)");
     m_saveDialog->filters.insert(0, "Dojo files (*.dojo)");
+    m_saveExport->filters.insert(0, "Excel files (*.xlsx)");
 
     m_dateDialog = new gDateDialog(this);
     m_dateDialog->setFont(this->font());
@@ -68,6 +70,7 @@ gMainWidget::~gMainWidget() {
 
     delete m_openDialog;
     delete m_saveDialog;
+    delete m_saveExport;
     delete m_dateDialog;
 
     delete ui;
@@ -137,6 +140,19 @@ void gMainWidget::openConfig(const QString& filename) {
                 }
             }
         }
+
+        { // SECTION: "tab_widget_people_kumite"
+            gXmlNode* node = xmlFile.findNode(node_2, "tab_widget_people_kumite");
+
+            if (node != nullptr) {
+                foreach (gXmlNode* child, node->children) {
+                    auto name = xmlFile.getAttribute(child, "name");
+                    auto size = xmlFile.getAttribute(child, "size").toInt();
+
+                    (void)ui->tableWidget_peopleKumite->setHeaderSize(name, size);
+                }
+            }
+        }
     }
 }
 
@@ -184,6 +200,22 @@ void gMainWidget::saveConfig(const QString& filename) {
 
         const auto& headerNames = ui->tableWidget_peopleKata->headerNames();
         const auto& headerSizes = ui->tableWidget_peopleKata->headerSizes();
+
+        auto N = headerNames.count();
+        for (decltype(N) i{0}; i < N; ++i) {
+            const auto& name = QString("header_%1").arg(i, 2, 10, QChar('0'));
+
+            auto* node_i = xmlFile.insertNode(node, name);
+            node_i->attributes.append(gXmlPair("name", headerNames.at(i)));
+            node_i->attributes.append(gXmlPair("size", headerSizes.at(i)));
+        }
+    }
+
+    { // SECTION: "tab_widget_people_kumite"
+        gXmlNode* node = xmlFile.insertNode(node_2, "tab_widget_people_kumite");
+
+        const auto& headerNames = ui->tableWidget_peopleKumite->headerNames();
+        const auto& headerSizes = ui->tableWidget_peopleKumite->headerSizes();
 
         auto N = headerNames.count();
         for (decltype(N) i{0}; i < N; ++i) {
@@ -282,7 +314,7 @@ void gMainWidget::slotButton_FileOpen() {
 
                 auto N = nodes.count();
                 for (decltype(N) i{0}; i < N; ++i) {
-                    auto* item = new gTableWidgetRow(rows, setupRow_People);
+                    auto* item = new gTableWidgetRow(rows, setupRow_Full);
 
                     // clang-format off
                     item->at(0)->toItem()->setText (xmlFile.getAttribute(nodes.at(i), "surname"  ));
@@ -360,46 +392,169 @@ void gMainWidget::slotButton_FileSave() {
 }
 
 void gMainWidget::slotButton_MakeKata() {
-    const auto* rows = ui->tableWidget_people->rows();
+    comboBox_ReferencePopulate(ui->comboBox_ReferenceKata, ui->tab_2_kata, "02");
+}
 
-    auto references = rows->zipCellDataByColumn(8);
+void gMainWidget::slotButton_MakeKumite() {
+    comboBox_ReferencePopulate(ui->comboBox_ReferenceKumite, ui->tab_3_kumite, "12");
+}
+
+void gMainWidget::slotComboBox_ReferenceKata(const QString& text) {
+    comboBox_ReferenceChanged(ui->tableWidget_peopleKata, text, "02");
+}
+
+void gMainWidget::slotComboBox_ReferenceKumite(const QString& text) {
+    comboBox_ReferenceChanged(ui->tableWidget_peopleKumite, text, "12");
+}
+
+void gMainWidget::slotButton_ReorderKata() {
+    tableWidget_ReorderPeople(ui->tableWidget_peopleKata);
+}
+
+void gMainWidget::slotButton_ReorderKumite() {
+    tableWidget_ReorderPeople(ui->tableWidget_peopleKumite);
+}
+
+void gMainWidget::slotButton_ExportKata() {
+    const auto& title = ui->lineEdit_match_name->text();
+    tableWidget_ExportPeople(ui->tableWidget_peopleKata, title, "KATA");
+}
+
+void gMainWidget::slotButton_ExportKumite() {
+    const auto& title = ui->lineEdit_match_name->text();
+    tableWidget_ExportPeople(ui->tableWidget_peopleKumite, title, "KUMITE");
+}
+
+void gMainWidget::comboBox_ReferencePopulate(QComboBox*     comboBox_people_dst,
+                                             QWidget*       tab_number_dst,
+                                             const QString& filter) {
+
+    QStringList references;
+
+    const auto* rows_src = ui->tableWidget_people->rows();
+
+    auto N = rows_src->count();
+    for (decltype(N) i{0}; i < N; ++i) {
+        auto* row = rows_src->at(i);
+        auto  tag = row->at(FULL_PRACTICE)->toCBox()->index();
+        auto  ref = row->at(FULL_REFERENCE)->toItem()->text();
+
+        if (filter.contains(tag) && !references.contains(ref)) {
+            references.append(ref);
+        }
+    }
 
     if (references.count() > 0) {
-        ui->comboBox_ReferenceKata->clear();
-        ui->comboBox_ReferenceKata->addItems(references);
+        references.sort();
+        comboBox_people_dst->clear();
+        comboBox_people_dst->addItems(references);
 
-        ui->tabWidget->setCurrentIndex(1);
+        ui->tabWidget->setCurrentWidget(tab_number_dst);
     }
 }
 
-void gMainWidget::slotButton_MakeKumite() {}
+void gMainWidget::comboBox_ReferenceChanged(gTableWidget*  tableWidget_people_dst,
+                                            const QString& reference,
+                                            const QString& filter) {
 
-void gMainWidget::slotComboBox_ReferenceKata(const QString& text) {
-    const auto* rows      = ui->tableWidget_people->rows();
-    auto*       rows_kata = ui->tableWidget_peopleKata->rows();
+    const auto* rows_src = ui->tableWidget_people->rows();
+    auto*       rows_dst = tableWidget_people_dst->rows();
 
-    rows_kata->clearAll();
+    rows_dst->clearAll();
 
-    auto group = rows->filterRows(8, text);
+    auto group = rows_src->filterRows(FULL_REFERENCE, reference);
 
     auto N = group.count();
     for (decltype(N) i{0}; i < N; ++i) {
         auto* row_ptr = group.at(i);
 
-        auto* item = new gTableWidgetRow(rows_kata, setupRow_PeopleKata);
-        // clang-format off
-        item->at(0)->toItem()->setText (row_ptr->at(0)->toItem()->text() ); // Cognome
-        item->at(1)->toItem()->setText (row_ptr->at(1)->toItem()->text() ); // Nome
-        item->at(2)->toItem()->setText (row_ptr->at(3)->toCBox()->text() ); // Categoria
-        item->at(3)->toIcon()->setIndex(row_ptr->at(4)->toCBox()->index()); // Grado
-        item->at(4)->toItem()->setText (row_ptr->at(7)->toItem()->text() ); // Società
-        item->at(5)->toItem()->setText (row_ptr->at(6)->toCBox()->text() ); // Stile
-        // clang-format on
+        auto index = row_ptr->at(FULL_PRACTICE)->toCBox()->index();
 
-        rows_kata->insertRow(i, item);
+        if (filter.contains(index)) {
+            auto* item = new gTableWidgetRow(rows_dst, setupRow_Mini);
+            // clang-format off
+            item->at(MINI_SURNAME )->toItem()->setText (row_ptr->at(FULL_SURNAME )->toItem()->text() );
+            item->at(MINI_NAME    )->toItem()->setText (row_ptr->at(FULL_NAME    )->toItem()->text() );
+            item->at(MINI_CATEGORY)->toItem()->setText (row_ptr->at(FULL_CATEGORY)->toCBox()->text() );
+            item->at(MINI_RANK    )->toIcon()->setIndex(row_ptr->at(FULL_RANK    )->toCBox()->index());
+            item->at(MINI_SOCIETY )->toItem()->setText (row_ptr->at(FULL_SOCIETY )->toItem()->text() );
+            item->at(MINI_STYLE   )->toItem()->setText (row_ptr->at(FULL_STYLE   )->toCBox()->text() );
+            // clang-format on
+            rows_dst->insertRow(i, item);
+        }
     }
 }
 
-void gMainWidget::slotComboBox_ReferenceKumite(const QString& text) {
-    (void)text;
+void gMainWidget::tableWidget_ReorderPeople(gTableWidget* tableWidget_people_dst) {
+    auto* rows = tableWidget_people_dst->rows();
+
+    if (rows->count() > 0) {
+        auto list = rows->cellsData();
+
+        auto iB = list.begin();
+        auto iE = list.end();
+
+        // std::sort(iB, iE, [](const auto& a, const auto& b) {
+        //     return a.at(MINI_SOCIETY) < b.at(MINI_SOCIETY);
+        // });
+
+        std::random_device random;
+        std::mt19937       engine(random());
+
+        auto attempts = 0;
+        while (attempts++ < 1000) {
+            std::shuffle(iB, iE, engine);
+            bool sparse = true;
+
+            auto iP = iB;
+            auto iN = iB + 1;
+
+            while (iN != iE) {
+                const auto& name_P = iP->at(MINI_SOCIETY);
+                const auto& name_N = iN->at(MINI_SOCIETY);
+
+                if (name_P == name_N) {
+                    sparse = false;
+                }
+                ++iP;
+                ++iN;
+            }
+
+            if (sparse) {
+                break;
+            }
+        }
+
+        rows->setCellsData(list);
+
+        qDebug("reorder attempts: %d", attempts);
+    }
+}
+
+void gMainWidget::tableWidget_ExportPeople(gTableWidget*  tableWidget_people_src,
+                                           const QString& title,
+                                           const QString& practice) {
+
+    auto* rows = tableWidget_people_src->rows();
+
+    if (rows->count() > 0) {
+        if (m_saveExport->show(m_directory)) {
+            if (m_saveExport->isExtensionEmpty()) {
+                m_saveExport->selected += ".xlsx";
+            }
+
+            QXlsx::Document document;
+
+            gXlsx::PeopleRecord record;
+
+            record.title    = title;
+            record.practice = practice;
+
+            gXlsx::decodeTableWidget(tableWidget_people_src, record);
+
+            gXlsx::createSheet(document, record);
+
+            document.saveAs(m_saveExport->selected);
+        }
+    }
 }

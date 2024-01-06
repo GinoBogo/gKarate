@@ -13,9 +13,10 @@
 #ifndef GMAINWIDGET_HPP
 #define GMAINWIDGET_HPP
 
-#include "libs/gFileDialog.hpp"
+#include "gFileDialog.hpp"
 
 #include "gDateDialog.hpp"
+#include "gTableWidget.hpp"
 
 #include <QWidget>
 
@@ -42,6 +43,11 @@ class gMainWidget : public QWidget {
     void slotComboBox_ReferenceKata(const QString& text);
     void slotComboBox_ReferenceKumite(const QString& text);
 
+    void slotButton_ReorderKata();
+    void slotButton_ReorderKumite();
+    void slotButton_ExportKata();
+    void slotButton_ExportKumite();
+
   private:
     void    updateWindowTitle();
     QString getAppPath() const;
@@ -53,11 +59,26 @@ class gMainWidget : public QWidget {
     void clearTab2_Kata();
     void clearTab3_Kumite();
 
+    void comboBox_ReferencePopulate(QComboBox*     comboBox_people_dst,
+                                    QWidget*       tab_number_dst,
+                                    const QString& filter);
+
+    void comboBox_ReferenceChanged(gTableWidget*  tableWidget_people_dst,
+                                   const QString& reference,
+                                   const QString& filter);
+
+    void tableWidget_ReorderPeople(gTableWidget* tableWidget_people_dst);
+
+    void tableWidget_ExportPeople(gTableWidget*  tableWidget_people_src,
+                                  const QString& title,
+                                  const QString& practice);
+
   private:
     Ui::gMainWidget* ui;
 
     gFileDialog* m_openDialog;
     gFileDialog* m_saveDialog;
+    gFileDialog* m_saveExport;
     gDateDialog* m_dateDialog;
 
     QString m_document;
