@@ -273,6 +273,8 @@ void gMainWidget::slotButton_FileNew() {
 }
 
 void gMainWidget::slotButton_FileOpen() {
+    ui->tableWidget_people->setSortingEnabled(false);
+
     if (m_openDialog->show(m_directory)) {
         gXmlFile xmlFile;
 
@@ -333,6 +335,8 @@ void gMainWidget::slotButton_FileOpen() {
             }
         }
     }
+
+    ui->tableWidget_people->setSortingEnabled(true);
 }
 
 void gMainWidget::slotButton_FileSave() {
