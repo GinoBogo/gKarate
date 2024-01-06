@@ -502,7 +502,7 @@ void gMainWidget::tableWidget_ReorderPeople(gTableWidget* tableWidget_people_dst
         std::mt19937       engine(random());
 
         auto attempts = 0;
-        while (attempts++ < 1000) {
+        while (attempts++ < 100) {
             std::shuffle(iB, iE, engine);
             bool sparse = true;
 
