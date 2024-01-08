@@ -21,6 +21,7 @@ gTableWidgetCBox::gTableWidgetCBox(gTableWidgetRow* parent) : gTableWidgetBase(C
     m_line_edit.setAlignment(Qt::AlignCenter);
 
     setLineEdit(&m_line_edit);
+    setFocusPolicy(Qt::StrongFocus);
     setContextMenuPolicy(Qt::NoContextMenu);
 }
 

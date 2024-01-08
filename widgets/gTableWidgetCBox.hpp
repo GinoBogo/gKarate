@@ -35,6 +35,11 @@ class gTableWidgetCBox : public gTableWidgetBase, public QComboBox {
     QString          text() const { return currentText(); }
     void             setText(const QString& data) { setCurrentText(data); }
 
+    void wheelEvent(QWheelEvent* e) {
+        if (hasFocus())
+            QComboBox::wheelEvent(e);
+    }
+
   private:
     gTableWidgetRow* m_parent;
     QList<QPixmap>   m_images;

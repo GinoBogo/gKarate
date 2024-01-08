@@ -13,6 +13,7 @@ INCLUDEPATH += ./qxlsx
 INCLUDEPATH += ./widgets
 
 QMAKE_CXXFLAGS += -std=c++17
+QMAKE_CXXFLAGS += -Wno-unused-parameter -Wno-unused-variable
 
 # You can make your code fail to compile if you use deprecated APIs.
 # In order to do so, uncomment the following line.

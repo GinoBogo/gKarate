@@ -11,6 +11,7 @@
  */
 
 #include "gMainWidget.hpp"
+#include "gTableWidgetRows.hpp"
 #include "ui_gMainWidget.h"
 
 #include "libs/gXmlFile.hpp"
@@ -78,6 +79,17 @@ gMainWidget::~gMainWidget() {
 
 void gMainWidget::updateWindowTitle() {
     setWindowTitle(m_document + " - " + "gKarate");
+}
+
+void gMainWidget::updateRowTargetDate() {
+    const auto& date = ui->lineEdit_match_date->text();
+    const auto* rows = ui->tableWidget_people->rows();
+
+    auto N = rows->count();
+    for (decltype(N) i{0}; i < N; ++i) {
+        const auto* row = rows->at(i);
+        row->at(FULL_BIRTHDAY)->toDate()->setTargetDate(date);
+    }
 }
 
 QString gMainWidget::getAppPath() const {
@@ -240,11 +252,13 @@ void gMainWidget::clearTab1_Match() {
 
 void gMainWidget::clearTab2_Kata() {
     ui->comboBox_ReferenceKata->clear();
-
     ui->tableWidget_peopleKata->rows()->clearAll();
 }
 
-void gMainWidget::clearTab3_Kumite() {}
+void gMainWidget::clearTab3_Kumite() {
+    ui->comboBox_ReferenceKumite->clear();
+    ui->tableWidget_peopleKumite->rows()->clearAll();
+}
 
 void gMainWidget::slotButton_MatchDate() {
     auto date = QDate::currentDate();
@@ -260,6 +274,8 @@ void gMainWidget::slotButton_MatchDate() {
         date = m_dateDialog->getDate();
         text = gDateDialog::date2str(date);
         ui->lineEdit_match_date->setText(text);
+
+        updateRowTargetDate();
     }
 }
 
@@ -317,7 +333,6 @@ void gMainWidget::slotButton_FileOpen() {
                 auto N = nodes.count();
                 for (decltype(N) i{0}; i < N; ++i) {
                     auto* item = new gTableWidgetRow(rows, setupRow_Full);
-
                     // clang-format off
                     item->at(0)->toItem()->setText (xmlFile.getAttribute(nodes.at(i), "surname"  ));
                     item->at(1)->toItem()->setText (xmlFile.getAttribute(nodes.at(i), "name"     ));
@@ -329,9 +344,9 @@ void gMainWidget::slotButton_FileOpen() {
                     item->at(7)->toItem()->setText (xmlFile.getAttribute(nodes.at(i), "society"  ));
                     item->at(8)->toItem()->setText (xmlFile.getAttribute(nodes.at(i), "reference"));
                     // clang-format on
-
                     rows->insertRow(i, item);
                 }
+                updateRowTargetDate();
             }
         }
     }
@@ -419,14 +434,60 @@ void gMainWidget::slotButton_ReorderKumite() {
     tableWidget_ReorderPeople(ui->tableWidget_peopleKumite);
 }
 
+void __export_sanitizer(QString& selected) {
+    selected.replace(".xlsx", "");
+
+    selected.replace("_kata_register", "");
+    selected.replace("_kata_evaluate", "");
+
+    selected.replace("_kumite_register", "");
+    selected.replace("_kumite_evaluate", "");
+}
+
 void gMainWidget::slotButton_ExportKata() {
-    const auto& title = ui->lineEdit_match_name->text();
-    tableWidget_ExportPeople(ui->tableWidget_peopleKata, title, "KATA");
+    if (m_saveExport->show(m_directory)) {
+        auto selected = m_saveExport->selected;
+        __export_sanitizer(selected);
+
+        auto register_filename = selected + "_kata_register.xlsx";
+        auto evaluate_filename = selected + "_kata_evaluate.xlsx";
+
+        QXlsx::Document register_xlsx;
+        QXlsx::Document evaluate_xlsx;
+
+        register_xlsx.setDocumentProperty("creator", "Gino Francesco Bogo");
+        evaluate_xlsx.setDocumentProperty("creator", "Gino Francesco Bogo");
+
+        const auto& title = ui->lineEdit_match_name->text();
+        tableWidget_ExportRegister(ui->tableWidget_peopleKata, register_xlsx, title, "KATA");
+        tableWidget_ExportEvaluate(ui->tableWidget_peopleKata, evaluate_xlsx, title, "KATA");
+
+        register_xlsx.saveAs(register_filename);
+        evaluate_xlsx.saveAs(evaluate_filename);
+    }
 }
 
 void gMainWidget::slotButton_ExportKumite() {
-    const auto& title = ui->lineEdit_match_name->text();
-    tableWidget_ExportPeople(ui->tableWidget_peopleKumite, title, "KUMITE");
+    if (m_saveExport->show(m_directory)) {
+        auto selected = m_saveExport->selected;
+        __export_sanitizer(selected);
+
+        auto register_filename = selected + "_kumite_register.xlsx";
+        auto evaluate_filename = selected + "_kumite_evaluate.xlsx";
+
+        QXlsx::Document register_xlsx;
+        QXlsx::Document evaluate_xlsx;
+
+        register_xlsx.setDocumentProperty("creator", "Gino Francesco Bogo");
+        evaluate_xlsx.setDocumentProperty("creator", "Gino Francesco Bogo");
+
+        const auto& title = ui->lineEdit_match_name->text();
+        tableWidget_ExportRegister(ui->tableWidget_peopleKumite, register_xlsx, title, "KUMITE");
+        tableWidget_ExportEvaluate(ui->tableWidget_peopleKumite, evaluate_xlsx, title, "KUMITE");
+
+        register_xlsx.saveAs(register_filename);
+        evaluate_xlsx.saveAs(evaluate_filename);
+    }
 }
 
 void gMainWidget::comboBox_ReferencePopulate(QComboBox*     comboBox_people_dst,
@@ -519,6 +580,7 @@ void gMainWidget::tableWidget_ReorderPeople(gTableWidget* tableWidget_people_dst
 
                 if (name_P == name_N) {
                     sparse = false;
+                    break;
                 }
                 ++iP;
                 ++iN;
@@ -535,30 +597,76 @@ void gMainWidget::tableWidget_ReorderPeople(gTableWidget* tableWidget_people_dst
     }
 }
 
-void gMainWidget::tableWidget_ExportPeople(gTableWidget*  tableWidget_people_src,
-                                           const QString& title,
-                                           const QString& practice) {
+void gMainWidget::tableWidget_ExportRegister(gTableWidget*    tableWidget_people_src,
+                                             QXlsx::Document& xlsx,
+                                             const QString&   title,
+                                             const QString&   practice) {
 
-    auto* rows = tableWidget_people_src->rows();
+    const auto* rows = tableWidget_people_src->rows();
 
     if (rows->count() > 0) {
-        if (m_saveExport->show(m_directory)) {
-            if (m_saveExport->isExtensionEmpty()) {
-                m_saveExport->selected += ".xlsx";
-            }
+        gXlsx::PeopleRecord record;
+        record.title    = title;
+        record.practice = practice;
+        gXlsx::decodeTableWidget(tableWidget_people_src, record);
 
-            QXlsx::Document document;
+        auto mod = record.athletes.count() / gXlsx::max_register_lines;
+        auto rem = record.athletes.count() % gXlsx::max_register_lines;
 
-            gXlsx::PeopleRecord record;
+        auto group = record;
 
-            record.title    = title;
-            record.practice = practice;
+        decltype(mod) sheet{1};
+        for (; sheet <= mod; ++sheet) {
+            xlsx.addSheet(QString("%1_%2").arg(record.practice).arg(sheet));
 
-            gXlsx::decodeTableWidget(tableWidget_people_src, record);
+            const auto pos = (sheet - 1) * gXlsx::max_register_lines;
+            group.athletes = record.athletes.mid(pos, gXlsx::max_register_lines);
+            gXlsx::createSheetRegister(xlsx, group, sheet);
+        }
 
-            gXlsx::createSheet(document, record);
+        if (rem > 0) {
+            xlsx.addSheet(QString("%1_%2").arg(record.practice).arg(sheet));
 
-            document.saveAs(m_saveExport->selected);
+            const auto pos = (sheet - 1) * gXlsx::max_register_lines;
+            group.athletes = record.athletes.mid(pos, rem);
+            gXlsx::createSheetRegister(xlsx, group, sheet);
+        }
+    }
+}
+
+void gMainWidget::tableWidget_ExportEvaluate(gTableWidget*    tableWidget_people_src,
+                                             QXlsx::Document& xlsx,
+                                             const QString&   title,
+                                             const QString&   practice) {
+
+    const auto* rows = tableWidget_people_src->rows();
+
+    if (rows->count() > 0) {
+        gXlsx::PeopleRecord record;
+        record.title    = title;
+        record.practice = practice;
+        gXlsx::decodeTableWidget(tableWidget_people_src, record);
+
+        auto mod = record.athletes.count() / gXlsx::max_evaluate_lines;
+        auto rem = record.athletes.count() % gXlsx::max_evaluate_lines;
+
+        auto group = record;
+
+        decltype(mod) sheet{1};
+        for (; sheet <= mod; ++sheet) {
+            xlsx.addSheet(QString("%1_%2").arg(record.practice).arg(sheet));
+
+            const auto pos = (sheet - 1) * gXlsx::max_evaluate_lines;
+            group.athletes = record.athletes.mid(pos, gXlsx::max_evaluate_lines);
+            gXlsx::createSheetEvaluate(xlsx, group, sheet);
+        }
+
+        if (rem > 0) {
+            xlsx.addSheet(QString("%1_%2").arg(record.practice).arg(sheet));
+
+            const auto pos = (sheet - 1) * gXlsx::max_evaluate_lines;
+            group.athletes = record.athletes.mid(pos, rem);
+            gXlsx::createSheetEvaluate(xlsx, group, sheet);
         }
     }
 }

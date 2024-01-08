@@ -56,14 +56,14 @@ void setupRow_Full(gTableWidgetRow* row_ptr) {
         items.at(2)->toDate()->setDate("31/12/2016");
 
         items.at(3)->toCBox()->addItems( //
-            {"6 ÷ 8 anni",
-             "9 ÷ 10 anni",
-             "11 ÷ 12 anni",
-             "13 ÷ 14 anni",
-             "15 ÷ 17 anni",
-             "18 ÷ 21 anni",
-             "22 ÷ 35 anni",
-             "36 ÷ 45 anni",
+            {"6 ÷ 8 anni",               //
+             "9 ÷ 10 anni",              //
+             "11 ÷ 12 anni",             //
+             "13 ÷ 14 anni",             //
+             "15 ÷ 17 anni",             //
+             "18 ÷ 21 anni",             //
+             "22 ÷ 35 anni",             //
+             "36 ÷ 45 anni",             //
              "+45 anni"});
 
         items.at(4)->toCBox()->images() = //

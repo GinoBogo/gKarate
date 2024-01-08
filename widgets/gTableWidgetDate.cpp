@@ -13,12 +13,15 @@
 #include "gTableWidgetDate.hpp"
 
 #include "gTableWidgetBase.hpp"
+#include "qdatetimeedit.h"
 
 gTableWidgetDate::gTableWidgetDate(gTableWidgetRow* parent) : gTableWidgetBase(DATE, this) {
     m_parent = parent;
+    m_target = QDate::currentDate();
 
     setAlignment(Qt::AlignCenter);
     setButtonSymbols(QAbstractSpinBox::NoButtons);
+    setFocusPolicy(Qt::StrongFocus);
     setContextMenuPolicy(Qt::NoContextMenu);
 
     connect(this, &QDateEdit::dateChanged, this, &gTableWidgetDate::slotDateChanged);
@@ -34,9 +37,40 @@ void gTableWidgetDate::setDate(const QString& value) {
     QDateEdit::setDate(date);
 }
 
+void gTableWidgetDate::setTargetDate(const QString& value) {
+    m_target = str2date(value);
+    slotDateChanged(QDateEdit::date());
+}
+
 void gTableWidgetDate::slotDateChanged(QDate date) {
-    auto age = QDate::currentDate().year() - date.year();
-    setToolTip(QString::number(age));
+    auto stop = m_target;
+
+    if (date.daysTo(stop) < 0) {
+        auto temp = stop;
+        stop      = date;
+        date      = temp;
+    }
+
+    auto Y = 0;
+    auto M = 0;
+    auto D = 0;
+
+    Y = stop.year() - date.year();
+
+    if ((M = stop.month() - date.month()) < 0) {
+        Y -= 1;
+        M += 12;
+    }
+
+    if ((D = stop.day() - date.day()) < 0) {
+        if (--M < 0) {
+            Y -= 1;
+            M += 12;
+        }
+        D += date.daysInMonth();
+    }
+
+    setToolTip(QString("%1Y %2M %3D").arg(Y).arg(M).arg(D));
 }
 
 const QString gTableWidgetDate::date2str(const QDate& date) {

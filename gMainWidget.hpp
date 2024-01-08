@@ -17,6 +17,7 @@
 
 #include "gDateDialog.hpp"
 #include "gTableWidget.hpp"
+#include "xlsxdocument.h"
 
 #include <QWidget>
 
@@ -50,6 +51,7 @@ class gMainWidget : public QWidget {
 
   private:
     void    updateWindowTitle();
+    void    updateRowTargetDate();
     QString getAppPath() const;
     QString addAppPath(const QString& filename) const;
     void    openConfig(const QString& filename);
@@ -69,9 +71,15 @@ class gMainWidget : public QWidget {
 
     void tableWidget_ReorderPeople(gTableWidget* tableWidget_people_dst);
 
-    void tableWidget_ExportPeople(gTableWidget*  tableWidget_people_src,
-                                  const QString& title,
-                                  const QString& practice);
+    void tableWidget_ExportRegister(gTableWidget*    tableWidget_people_src,
+                                    QXlsx::Document& xlsx,
+                                    const QString&   title,
+                                    const QString&   practice);
+
+    void tableWidget_ExportEvaluate(gTableWidget*    tableWidget_people_src,
+                                    QXlsx::Document& xlsx,
+                                    const QString&   title,
+                                    const QString&   practice);
 
   private:
     Ui::gMainWidget* ui;
