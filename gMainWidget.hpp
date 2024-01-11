@@ -13,9 +13,8 @@
 #ifndef GMAINWIDGET_HPP
 #define GMAINWIDGET_HPP
 
-#include "gFileDialog.hpp"
-
 #include "gDateDialog.hpp"
+#include "gFileDialog.hpp"
 #include "gTableWidget.hpp"
 #include "xlsxdocument.h"
 
@@ -29,6 +28,7 @@ QT_END_NAMESPACE
 
 class gMainWidget : public QWidget {
     Q_OBJECT
+
   public:
     gMainWidget(QWidget* parent = nullptr);
     ~gMainWidget();
@@ -52,6 +52,7 @@ class gMainWidget : public QWidget {
   private:
     void    updateWindowTitle();
     void    updateRowTargetDate();
+    QString getDocName() const;
     QString getAppPath() const;
     QString addAppPath(const QString& filename) const;
     void    openConfig(const QString& filename);
@@ -61,23 +62,19 @@ class gMainWidget : public QWidget {
     void clearTab2_Kata();
     void clearTab3_Kumite();
 
-    void comboBox_ReferencePopulate(QComboBox*     comboBox_people_dst,
-                                    QWidget*       tab_number_dst,
-                                    const QString& filter);
+    void comboBox_ReferencePopulate(QComboBox* comboBox_people_dst, QWidget* tab_number_dst, const QString& filter);
 
-    void comboBox_ReferenceChanged(gTableWidget*  tableWidget_people_dst,
-                                   const QString& reference,
-                                   const QString& filter);
+    void comboBox_ReferenceChanged(gTableWidget* tableWidget_people_dst, const QString& reference, const QString& filter);
 
     void tableWidget_ReorderPeople(gTableWidget* tableWidget_people_dst);
 
     void tableWidget_ExportRegister(gTableWidget*    tableWidget_people_src,
-                                    QXlsx::Document& xlsx,
+                                    QXlsx::Document& document,
                                     const QString&   title,
                                     const QString&   practice);
 
     void tableWidget_ExportEvaluate(gTableWidget*    tableWidget_people_src,
-                                    QXlsx::Document& xlsx,
+                                    QXlsx::Document& document,
                                     const QString&   title,
                                     const QString&   practice);
 

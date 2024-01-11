@@ -11,18 +11,18 @@
  */
 
 #include "gMainWidget.hpp"
-#include "gTableWidgetRows.hpp"
-#include "ui_gMainWidget.h"
 
+#include "gTableWidgetRows.hpp"
 #include "libs/gXmlFile.hpp"
 #include "tableWidgetExport.hpp"
 #include "tableWidgetSetup.hpp"
+#include "ui_gMainWidget.h"
 
 #include <QByteArray>
 #include <QDir>
-
-#include <algorithm>
-#include <random>
+#include <QRegularExpression>
+#include <algorithm> // sort
+#include <random>    // random_device
 
 gMainWidget::gMainWidget(QWidget* parent) : QWidget(parent), ui(new Ui::gMainWidget) {
 
@@ -45,7 +45,7 @@ gMainWidget::gMainWidget(QWidget* parent) : QWidget(parent), ui(new Ui::gMainWid
     ui->tableWidget_peopleKumite->rows()->setupRow(setupRow_Mini);
     ui->tableWidget_peopleKumite->setContextMenuPolicy(Qt::NoContextMenu);
 
-    m_document  = "senza nome";
+    m_document  = "senza_nome";
     m_directory = getAppPath();
     openConfig(addAppPath("gKarate.cfg"));
 
@@ -92,6 +92,18 @@ void gMainWidget::updateRowTargetDate() {
     }
 }
 
+QString gMainWidget::getDocName() const {
+    QString name = "senza_nome";
+
+    auto title = windowTitle().split(" - ");
+    if (title.count() > 1) {
+        name = title.at(0);
+        name.replace(".dojo", "");
+    }
+
+    return name;
+}
+
 QString gMainWidget::getAppPath() const {
     return qApp->applicationDirPath() + QDir::separator();
 }
@@ -109,7 +121,7 @@ void gMainWidget::openConfig(const QString& filename) {
         gXmlNode* node_1 = xmlFile.findNode(node_0, "main_widget");
         gXmlNode* node_2 = xmlFile.findNode(node_1, "tab_widget");
 
-        { // SECTION: "geometry"
+        { // SEGMENT "geometry"
             gXmlNode* node_A = xmlFile.findNode(node_1, "geometry");
 
             if (node_A != nullptr) {
@@ -118,7 +130,7 @@ void gMainWidget::openConfig(const QString& filename) {
             }
         }
 
-        { // SECTION: "directory"
+        { // SEGMENT "directory"
             gXmlNode* node_A = xmlFile.findNode(node_1, "directory");
 
             if (node_A != nullptr) {
@@ -127,7 +139,7 @@ void gMainWidget::openConfig(const QString& filename) {
             }
         }
 
-        { // SECTION: "tab_widget_people"
+        { // SEGMENT "tab_widget_people"
             gXmlNode* node = xmlFile.findNode(node_2, "tab_widget_people");
 
             if (node != nullptr) {
@@ -140,7 +152,7 @@ void gMainWidget::openConfig(const QString& filename) {
             }
         }
 
-        { // SECTION: "tab_widget_people_kata"
+        { // SEGMENT "tab_widget_people_kata"
             gXmlNode* node = xmlFile.findNode(node_2, "tab_widget_people_kata");
 
             if (node != nullptr) {
@@ -153,7 +165,7 @@ void gMainWidget::openConfig(const QString& filename) {
             }
         }
 
-        { // SECTION: "tab_widget_people_kumite"
+        { // SEGMENT "tab_widget_people_kumite"
             gXmlNode* node = xmlFile.findNode(node_2, "tab_widget_people_kumite");
 
             if (node != nullptr) {
@@ -177,21 +189,21 @@ void gMainWidget::saveConfig(const QString& filename) {
     gXmlNode* node_1 = xmlFile.insertNode(node_0, "main_widget");
     gXmlNode* node_2 = xmlFile.insertNode(node_1, "tab_widget");
 
-    { // SECTION: "geometry"
+    { // SEGMENT "geometry"
         gXmlNode* node_A = xmlFile.insertNode(node_1, "geometry");
 
         gXmlPair pair("data", gXmlPair::byte2str(saveGeometry()));
         node_A->attributes.append(pair);
     }
 
-    { // SECTION: "directory"
+    { // SEGMENT "directory"
         gXmlNode* node_A = xmlFile.insertNode(node_1, "directory");
 
         gXmlPair pair("data", gXmlPair::str2hex(m_directory));
         node_A->attributes.append(pair);
     }
 
-    { // SECTION: "tab_widget_people"
+    { // SEGMENT "tab_widget_people"
         gXmlNode* node = xmlFile.insertNode(node_2, "tab_widget_people");
 
         const auto& headerNames = ui->tableWidget_people->headerNames();
@@ -207,7 +219,7 @@ void gMainWidget::saveConfig(const QString& filename) {
         }
     }
 
-    { // SECTION: "tab_widget_people_kata"
+    { // SEGMENT "tab_widget_people_kata"
         gXmlNode* node = xmlFile.insertNode(node_2, "tab_widget_people_kata");
 
         const auto& headerNames = ui->tableWidget_peopleKata->headerNames();
@@ -223,7 +235,7 @@ void gMainWidget::saveConfig(const QString& filename) {
         }
     }
 
-    { // SECTION: "tab_widget_people_kumite"
+    { // SEGMENT "tab_widget_people_kumite"
         gXmlNode* node = xmlFile.insertNode(node_2, "tab_widget_people_kumite");
 
         const auto& headerNames = ui->tableWidget_peopleKumite->headerNames();
@@ -306,7 +318,7 @@ void gMainWidget::slotButton_FileOpen() {
 
             gXmlNode* node_0 = nullptr;
 
-            { // SECTION: "group_match"
+            { // SEGMENT "group_match"
                 gXmlNode* node_1 = xmlFile.findNode(node_0, "group_match");
                 gXmlNode* node_2 = xmlFile.findNode(node_1, "match_name");
                 gXmlNode* node_3 = xmlFile.findNode(node_1, "match_site");
@@ -323,7 +335,7 @@ void gMainWidget::slotButton_FileOpen() {
                 }
             }
 
-            { // SECTION: "group_people"
+            { // SEGMENT "group_people"
                 gXmlNode* node_1 = xmlFile.findNode(node_0, "group_people");
 
                 auto* rows = ui->tableWidget_people->rows();
@@ -362,7 +374,7 @@ void gMainWidget::slotButton_FileSave() {
 
         gXmlNode* node_0 = nullptr;
 
-        { // SECTION: "group_match"
+        { // SEGMENT "group_match"
             gXmlNode* node_1 = xmlFile.insertNode(node_0, "group_match");
             gXmlNode* node_2 = xmlFile.insertNode(node_1, "match_name");
             gXmlNode* node_3 = xmlFile.insertNode(node_1, "match_site");
@@ -373,7 +385,7 @@ void gMainWidget::slotButton_FileSave() {
             node_4->text = ui->lineEdit_match_date->text().trimmed();
         }
 
-        { // SECTION: "group_people"
+        { // SEGMENT "group_people"
             gXmlNode* node_1 = xmlFile.insertNode(node_0, "group_people");
 
             const auto* rows = ui->tableWidget_people->rows();
@@ -435,22 +447,24 @@ void gMainWidget::slotButton_ReorderKumite() {
 }
 
 void __export_sanitizer(QString& selected) {
-    selected.replace(".xlsx", "");
+    auto m1 = QStringLiteral("((_register)|(_evaluate))(.xlsx)");
+    auto r1 = QRegularExpression(m1, QRegularExpression::CaseInsensitiveOption);
+    selected.remove(r1);
 
-    selected.replace("_kata_register", "");
-    selected.replace("_kata_evaluate", "");
-
-    selected.replace("_kumite_register", "");
-    selected.replace("_kumite_evaluate", "");
+    auto m2 = QStringLiteral("((_kata)|(_kumite))(_ref)(\\d+)");
+    auto r2 = QRegularExpression(m2, QRegularExpression::CaseInsensitiveOption);
+    selected.remove(r2);
 }
 
 void gMainWidget::slotButton_ExportKata() {
-    if (m_saveExport->show(m_directory)) {
+    const auto reference = "_kata_ref" + ui->comboBox_ReferenceKata->currentText();
+
+    if (m_saveExport->show(m_directory, getDocName() + reference)) {
         auto selected = m_saveExport->selected;
         __export_sanitizer(selected);
 
-        auto register_filename = selected + "_kata_register.xlsx";
-        auto evaluate_filename = selected + "_kata_evaluate.xlsx";
+        auto register_filename = selected + reference + "_register.xlsx";
+        auto evaluate_filename = selected + reference + "_evaluate.xlsx";
 
         QXlsx::Document register_xlsx;
         QXlsx::Document evaluate_xlsx;
@@ -468,12 +482,14 @@ void gMainWidget::slotButton_ExportKata() {
 }
 
 void gMainWidget::slotButton_ExportKumite() {
-    if (m_saveExport->show(m_directory)) {
+    const auto reference = "_kumite_ref" + ui->comboBox_ReferenceKumite->currentText();
+
+    if (m_saveExport->show(m_directory, getDocName())) {
         auto selected = m_saveExport->selected;
         __export_sanitizer(selected);
 
-        auto register_filename = selected + "_kumite_register.xlsx";
-        auto evaluate_filename = selected + "_kumite_evaluate.xlsx";
+        auto register_filename = selected + "_register.xlsx";
+        auto evaluate_filename = selected + "_evaluate.xlsx";
 
         QXlsx::Document register_xlsx;
         QXlsx::Document evaluate_xlsx;
@@ -490,9 +506,7 @@ void gMainWidget::slotButton_ExportKumite() {
     }
 }
 
-void gMainWidget::comboBox_ReferencePopulate(QComboBox*     comboBox_people_dst,
-                                             QWidget*       tab_number_dst,
-                                             const QString& filter) {
+void gMainWidget::comboBox_ReferencePopulate(QComboBox* comboBox_people_dst, QWidget* tab_number_dst, const QString& filter) {
 
     QStringList references;
 
@@ -518,9 +532,7 @@ void gMainWidget::comboBox_ReferencePopulate(QComboBox*     comboBox_people_dst,
     }
 }
 
-void gMainWidget::comboBox_ReferenceChanged(gTableWidget*  tableWidget_people_dst,
-                                            const QString& reference,
-                                            const QString& filter) {
+void gMainWidget::comboBox_ReferenceChanged(gTableWidget* tableWidget_people_dst, const QString& reference, const QString& filter) {
 
     const auto* rows_src = ui->tableWidget_people->rows();
     auto*       rows_dst = tableWidget_people_dst->rows();
@@ -598,7 +610,7 @@ void gMainWidget::tableWidget_ReorderPeople(gTableWidget* tableWidget_people_dst
 }
 
 void gMainWidget::tableWidget_ExportRegister(gTableWidget*    tableWidget_people_src,
-                                             QXlsx::Document& xlsx,
+                                             QXlsx::Document& document,
                                              const QString&   title,
                                              const QString&   practice) {
 
@@ -617,25 +629,25 @@ void gMainWidget::tableWidget_ExportRegister(gTableWidget*    tableWidget_people
 
         decltype(mod) sheet{1};
         for (; sheet <= mod; ++sheet) {
-            xlsx.addSheet(QString("%1_%2").arg(record.practice).arg(sheet));
+            document.addSheet(QString("%1_%2").arg(record.practice).arg(sheet));
 
             const auto pos = (sheet - 1) * gXlsx::max_register_lines;
             group.athletes = record.athletes.mid(pos, gXlsx::max_register_lines);
-            gXlsx::createSheetRegister(xlsx, group, sheet);
+            gXlsx::createSheetRegister(document, group, sheet);
         }
 
         if (rem > 0) {
-            xlsx.addSheet(QString("%1_%2").arg(record.practice).arg(sheet));
+            document.addSheet(QString("%1_%2").arg(record.practice).arg(sheet));
 
             const auto pos = (sheet - 1) * gXlsx::max_register_lines;
             group.athletes = record.athletes.mid(pos, rem);
-            gXlsx::createSheetRegister(xlsx, group, sheet);
+            gXlsx::createSheetRegister(document, group, sheet);
         }
     }
 }
 
 void gMainWidget::tableWidget_ExportEvaluate(gTableWidget*    tableWidget_people_src,
-                                             QXlsx::Document& xlsx,
+                                             QXlsx::Document& document,
                                              const QString&   title,
                                              const QString&   practice) {
 
@@ -654,19 +666,19 @@ void gMainWidget::tableWidget_ExportEvaluate(gTableWidget*    tableWidget_people
 
         decltype(mod) sheet{1};
         for (; sheet <= mod; ++sheet) {
-            xlsx.addSheet(QString("%1_%2").arg(record.practice).arg(sheet));
+            document.addSheet(QString("%1_%2").arg(record.practice).arg(sheet));
 
             const auto pos = (sheet - 1) * gXlsx::max_evaluate_lines;
             group.athletes = record.athletes.mid(pos, gXlsx::max_evaluate_lines);
-            gXlsx::createSheetEvaluate(xlsx, group, sheet);
+            gXlsx::createSheetEvaluate(document, group, sheet);
         }
 
         if (rem > 0) {
-            xlsx.addSheet(QString("%1_%2").arg(record.practice).arg(sheet));
+            document.addSheet(QString("%1_%2").arg(record.practice).arg(sheet));
 
             const auto pos = (sheet - 1) * gXlsx::max_evaluate_lines;
             group.athletes = record.athletes.mid(pos, rem);
-            gXlsx::createSheetEvaluate(xlsx, group, sheet);
+            gXlsx::createSheetEvaluate(document, group, sheet);
         }
     }
 }

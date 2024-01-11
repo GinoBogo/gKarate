@@ -17,7 +17,6 @@
 #include "xlsxchart.h"
 #include "xlsxdocument.h"
 #include "xlsxformat.h"
-#include "xlsxrichstring.h"
 
 using namespace QXlsx;
 
@@ -40,20 +39,19 @@ void gXlsx::decodeTableWidget(gTableWidget* src_table, PeopleRecord& dst_record)
             const auto* row = rows->at(i);
 
             if (i == 0) {
-                auto rank = row->at(MINI_RANK)->toIcon()->index().toInt();
-                auto rem  = rank % 2;
-                rank += rem;
+                auto rank  = row->at(MINI_RANK)->toIcon()->index().toInt();
+                auto rem   = rank % 2;
+                rank      += rem;
 
                 dst_record.category = row->at(MINI_CATEGORY)->toItem()->text();
                 dst_record.rank     = RANK_MAP[rank];
             }
 
-            const auto athlete = //
-                QString("%1 %2;%3;%4")
-                    .arg(row->at(MINI_SURNAME)->toItem()->text(), //
-                         row->at(MINI_NAME __)->toItem()->text(), //
-                         row->at(MINI_SOCIETY)->toItem()->text(), //
-                         row->at(MINI_STYLE _)->toItem()->text());
+            const auto athlete = QString("%1;%2;%3;%4")
+                                     .arg(row->at(MINI_SURNAME)->toItem()->text(),
+                                          row->at(MINI_NAME __)->toItem()->text(),
+                                          row->at(MINI_SOCIETY)->toItem()->text(),
+                                          row->at(MINI_STYLE _)->toItem()->text());
 
             dst_record.athletes.append(athlete);
         }
@@ -69,11 +67,8 @@ void __merge_cells(QXlsx::Document&     document, //
                    int*                 r2 = nullptr,
                    int*                 c2 = nullptr) {
 
-    rw = std::max(0, rw - 1);
-    ch = std::max(0, ch - 1);
-
-    auto _r2 = r1 + rw;
-    auto _c2 = c1 + ch;
+    const auto _r2 = r1 + std::max(0, rw - 1);
+    const auto _c2 = c1 + std::max(0, ch - 1);
 
     CellRange range(r1, c1, _r2, _c2);
     document.mergeCells(range, format);
@@ -88,11 +83,9 @@ void __merge_cells(QXlsx::Document&     document, //
 }
 
 void gXlsx::createSheetRegister(QXlsx::Document& document, PeopleRecord& record, int sheet) {
-    document.workbook()->setHtmlToRichStringEnabled(true);
-
     auto shift_col = 3.0;
-    auto scale_col = 4.5;
     auto shift_row = 14.0;
+    auto scale_col = 4.5;
     auto scale_row = 16.0;
 
     // clang-format off
@@ -162,13 +155,13 @@ void gXlsx::createSheetRegister(QXlsx::Document& document, PeopleRecord& record,
     document.write(14, 18, "STILE"                , header_3);
     // clang-format on
 
-    Format lines_center;
+    Format lines_center; // Index, Style
     lines_center.setBorderStyle(Format::BorderThin);
     lines_center.setVerticalAlignment(Format::AlignVCenter);
     lines_center.setHorizontalAlignment(Format::AlignHCenter);
     lines_center.setFontSize(11);
 
-    Format lines_left;
+    Format lines_left; // Identity, Society
     lines_left.setBorderStyle(Format::BorderThin);
     lines_left.setVerticalAlignment(Format::AlignVCenter);
     lines_left.setHorizontalAlignment(Format::AlignLeft);
@@ -182,13 +175,13 @@ void gXlsx::createSheetRegister(QXlsx::Document& document, PeopleRecord& record,
         CellRange range_C(15 + i, 11, 15 + i, 17);
         CellRange range_D(15 + i, 18, 15 + i, 21);
 
-        document.mergeCells(range_A, lines_center); // Numero
-        document.mergeCells(range_B, lines_left  ); // Cognome e Nome
-        document.mergeCells(range_C, lines_left  ); // Società
-        document.mergeCells(range_D, lines_center); // Stile
+        document.mergeCells(range_A, lines_center); // Index
+        document.mergeCells(range_B, lines_left  ); // Identity
+        document.mergeCells(range_C, lines_left  ); // Society
+        document.mergeCells(range_D, lines_center); // Style
         // clang-format on
 
-        auto number = QString::number(i + (sheet - 1) * max_register_lines);
+        auto number = QString("%1.").arg(i + (sheet - 1) * max_register_lines);
         document.write(15 + i, 2, number);
     }
 
@@ -196,9 +189,9 @@ void gXlsx::createSheetRegister(QXlsx::Document& document, PeopleRecord& record,
     for (decltype(N) i{0}; i < N; ++i) {
         auto athlete = record.athletes.at(i).split(";", Qt::SkipEmptyParts);
         if (athlete.count() > 2) {
-            document.write(16 + i, 04, athlete.at(0));
-            document.write(16 + i, 11, athlete.at(1));
-            document.write(16 + i, 18, athlete.at(2));
+            document.write(16 + i, 04, athlete.at(0) + ", " + athlete.at(1));
+            document.write(16 + i, 11, athlete.at(2));
+            document.write(16 + i, 18, athlete.at(3));
         }
     }
 }
@@ -213,11 +206,11 @@ void __createTitle_evaluateKata(QXlsx::Document& document, int row) {
     frame.setFontSize(9);
 
     int c2;
-    __merge_cells(document, frame, row, 2, 1, 9, 0, &c2);
-    document.write(row, c2 - 9, "COGNOME E NOME");
+    __merge_cells(document, frame, row, 2, 1, 8, 0, &c2);
+    document.write(row, c2 - 8, "COGNOME E NOME");
 
-    __merge_cells(document, frame, row, c2, 1, 9, 0, &c2);
-    document.write(row, c2 - 9, "SOCIETA' E STILE");
+    __merge_cells(document, frame, row, c2, 1, 10, 0, &c2);
+    document.write(row, c2 - 10, "SOCIETA' E STILE");
 
     __merge_cells(document, frame, row, c2, 1, 10, 0, &c2);
     document.write(row, c2 - 10, "1° KATA");
@@ -289,67 +282,34 @@ void __createRow_evaluateKata(QXlsx::Document& document, int row) {
     frame.setVerticalAlignment(Format::AlignVCenter);
     frame.setHorizontalAlignment(Format::AlignLeft);
     frame.setFontSize(9);
+    frame.setTextWrap(true);
 
-    const auto row_1 = (row * 2) + 3;
-    const auto row_2 = row_1 + 1;
-
-    auto make_col_t1 = [&](int r1, int c1, int r2, int cw, int* cn) {
-        --cw;
-        auto _c2 = c1 + cw;
-
-        CellRange cr(r1, c1, r2, _c2);
-        document.mergeCells(cr, frame);
-
-        if (cn != 0) {
-            *cn = _c2 + 1;
-        }
-    };
-
-    auto make_col_t2 = [&](int r1, int c1, int r2, int cw, int* cn) {
-        --cw;
-        auto _c1 = c1;
-        auto _c2 = c1 + cw;
-
-        for (int i = 0; i < 5; ++i) {
-            CellRange cr(r1, _c1, r2, _c2);
-            document.mergeCells(cr, frame);
-            _c1 = _c2 + 1;
-            _c2 = _c1 + cw;
-        }
-
-        if (cn != 0) {
-            *cn = _c2 + 1;
-        }
-    };
+    const auto r1 = (row * 2) + 3;
+    const auto r2 = r1 + 1;
 
     // clang-format off
-    int cn;
-    make_col_t1(row_1,  2, row_2, 9, &cn);
-    make_col_t1(row_1, cn, row_1, 9,   0);
-    make_col_t1(row_2, cn, row_2, 9, &cn);
+    int c2;
+    __merge_cells(document, frame, r1,  2, 2,  8, 0, &c2);
+    __merge_cells(document, frame, r1, c2, 1, 10, 0,   0);
+    __merge_cells(document, frame, r2, c2, 1, 10, 0, &c2);
 
-    make_col_t2(row_1, cn, row_1, 2,   0);
-    make_col_t1(row_2, cn, row_2, 7, &cn);
-    make_col_t1(row_2, cn, row_2, 3, &cn);
-    make_col_t1(row_1, cn, row_2, 3, &cn);
-
-    make_col_t2(row_1, cn, row_1, 2,   0);
-    make_col_t1(row_2, cn, row_2, 7, &cn);
-    make_col_t1(row_2, cn, row_2, 3, &cn);
-    make_col_t1(row_1, cn, row_2, 3, &cn);
-
-    make_col_t2(row_1, cn, row_1, 2,   0);
-    make_col_t1(row_2, cn, row_2, 7, &cn);
-    make_col_t1(row_2, cn, row_2, 3, &cn);
-    make_col_t1(row_1, cn, row_2, 3, &cn);
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 5; ++j) {
+            __merge_cells(document, frame, r1, c2, 1, 2, 0, &c2);
+        }
+        c2 -= 2 * 5;
+        __merge_cells(document, frame, r2, c2, 1, 7, 0, &c2);
+        __merge_cells(document, frame, r2, c2, 1, 3, 0, &c2);
+        __merge_cells(document, frame, r1, c2, 2, 3, 0, &c2);
+    }
     // clang-format on
 }
 
 void __createSheet_evaluateKata(QXlsx::Document& document, gXlsx::PeopleRecord& record, int sheet) {
     // clang-format off
     auto shift_col =  3.0;
-    auto scale_col =  2.0;
     auto shift_row = 14.0;
+    auto scale_col =  2.0;
     auto scale_row = 14.5;
 
     document.setRowHeight(1,  1, shift_row);
@@ -370,18 +330,17 @@ void __createSheet_evaluateKata(QXlsx::Document& document, gXlsx::PeopleRecord& 
     for (decltype(N) i{0}; i < N; ++i) {
         auto athlete = record.athletes.at(i).split(";", Qt::SkipEmptyParts);
         if (athlete.count() > 2) {
-            document.write(3 + (i * 2), __ 2, athlete.at(0));
-            document.write(3 + (i * 2), _ 11, athlete.at(1));
-            document.write(4 + (i * 2), _ 11, athlete.at(2));
+            document.write(3 + (i * 2), __ 2, athlete.at(0) + "\n" + athlete.at(1));
+            document.write(3 + (i * 2), _ 10, athlete.at(2));
+            document.write(4 + (i * 2), _ 10, athlete.at(3));
         }
     }
 }
 
-void __createSheet_evaluateKumite(QXlsx::Document& document, gXlsx::PeopleRecord& record, int sheet) {}
+void __createSheet_evaluateKumite(QXlsx::Document& document, gXlsx::PeopleRecord& record, int sheet) {
+}
 
 void gXlsx::createSheetEvaluate(QXlsx::Document& document, PeopleRecord& record, int sheet) {
-    document.workbook()->setHtmlToRichStringEnabled(true);
-
     if (record.practice == "KATA") {
         __createSheet_evaluateKata(document, record, sheet);
         return;

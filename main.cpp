@@ -17,9 +17,11 @@
 #include <QSplashScreen>
 #include <QTimer>
 
+//#define ENABLE_SPLASH_SCREEN
+
 int main(int argc, char* argv[]) {
 
-    QApplication::setStyle("fusion");
+    QApplication::setStyle("macos");
 
     QApplication app(argc, argv);
 
@@ -27,6 +29,7 @@ int main(int argc, char* argv[]) {
 
     wnd.show();
 
+#ifdef ENABLE_SPLASH_SCREEN
     QPixmap pixmap(":/res/images/splash.png");
 
     QSplashScreen splash(pixmap, Qt::WindowStaysOnTopHint);
@@ -34,6 +37,7 @@ int main(int argc, char* argv[]) {
     splash.show();
 
     QTimer::singleShot(2500, &splash, &QWidget::close);
+#endif
 
     return app.exec();
 }
