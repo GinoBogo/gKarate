@@ -39,7 +39,7 @@ gFileDialog::gFileDialog(QWidget* parent, AcceptMode mode) : QFileDialog(parent)
     }
 }
 
-bool gFileDialog::show(QString& directory, QString filename) {
+bool gFileDialog::show(QString& directory, const QString& filename) {
     setDirectory(directory);
     setNameFilters(filters);
 
@@ -62,6 +62,6 @@ bool gFileDialog::show(QString& directory, QString filename) {
 }
 
 bool gFileDialog::isExtensionEmpty() {
-    auto info = QFileInfo(selected);
+    const auto& info = QFileInfo(selected);
     return info.suffix().isEmpty();
 }

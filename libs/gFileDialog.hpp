@@ -21,7 +21,7 @@ class gFileDialog : public QFileDialog {
   public:
     gFileDialog(QWidget* parent, AcceptMode mode);
 
-    bool show(QString& directory, QString filename = "");
+    bool show(QString& directory, const QString& filename = "");
 
     bool isExtensionEmpty();
 
