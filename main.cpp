@@ -17,7 +17,7 @@
 #include <QSplashScreen>
 #include <QTimer>
 
-//#define ENABLE_SPLASH_SCREEN
+// #define ENABLE_SPLASH_SCREEN
 
 int main(int argc, char* argv[]) {
 

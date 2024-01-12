@@ -13,7 +13,6 @@
 #include "gTableWidgetDate.hpp"
 
 #include "gTableWidgetBase.hpp"
-#include "qdatetimeedit.h"
 
 gTableWidgetDate::gTableWidgetDate(gTableWidgetRow* parent) : gTableWidgetBase(DATE, this) {
     m_parent = parent;
@@ -74,7 +73,7 @@ void gTableWidgetDate::slotDateChanged(QDate date) {
 }
 
 const QString gTableWidgetDate::date2str(const QDate& date) {
-    return QString("%1/%2/%3")
+    return QString("%1/%2/%3") //
         .arg(date.day(), 2, 10, QChar('0'))
         .arg(date.month(), 2, 10, QChar('0'))
         .arg(date.year());

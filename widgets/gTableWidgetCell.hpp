@@ -24,8 +24,12 @@ class gTableWidgetCell : public gTableWidgetBase, public QWidget {
   public:
     gTableWidgetCell(gTableWidgetRow* parent);
 
-    QString title() const { return windowTitle(); }
-    void    setTitle(const QString& title) { setWindowTitle(title); }
+    QString title() const {
+        return windowTitle();
+    }
+    void setTitle(const QString& title) {
+        setWindowTitle(title);
+    }
 
   private:
     gTableWidgetRow* m_parent;

@@ -26,17 +26,33 @@ class gXmlPair : public QPair<QString, QString> {
   public:
     gXmlPair(const QString& name, const QString& value);
 
-    inline QString& name() { return this->first; }
-    inline QString& value() { return this->second; }
+    inline QString& name() {
+        return this->first;
+    }
+    inline QString& value() {
+        return this->second;
+    }
 
-    inline void name(const QString& data) { this->first = data; }
-    inline void value(const QString& data) { this->second = data; }
+    inline void name(const QString& data) {
+        this->first = data;
+    }
+    inline void value(const QString& data) {
+        this->second = data;
+    }
 
-    static QString    byte2str(const QByteArray& data) { return QString::fromUtf8(data.toHex()); }
-    static QByteArray str2byte(const QString& data) { return QByteArray::fromHex(data.toUtf8()); }
+    static QString byte2str(const QByteArray& data) {
+        return QString::fromUtf8(data.toHex());
+    }
+    static QByteArray str2byte(const QString& data) {
+        return QByteArray::fromHex(data.toUtf8());
+    }
 
-    static QString str2hex(const QString& data) { return QString(data.toUtf8().toHex()); }
-    static QString hex2str(const QString& data) { return QString(QByteArray::fromHex(data.toUtf8())); }
+    static QString str2hex(const QString& data) {
+        return QString(data.toUtf8().toHex());
+    }
+    static QString hex2str(const QString& data) {
+        return QString(QByteArray::fromHex(data.toUtf8()));
+    }
 };
 
 #endif // GXMLPAIR_HPP

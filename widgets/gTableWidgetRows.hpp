@@ -13,9 +13,9 @@
 #ifndef GTABLEWIDGETROWS_HPP
 #define GTABLEWIDGETROWS_HPP
 
-#include <QList>
-
 #include "gTableWidgetRow.hpp"
+
+#include <QList>
 
 class gTableWidget;
 
@@ -25,11 +25,15 @@ class gTableWidgetRows : public QList<gTableWidgetRow*> {
     gTableWidgetRows(gTableWidget* parent);
     ~gTableWidgetRows();
 
-    void setupRow(gTableWidgetRow::func_setupRow setupRow) { f_setupRow = setupRow; }
+    void setupRow(gTableWidgetRow::func_setupRow setupRow) {
+        f_setupRow = setupRow;
+    }
 
     void clearAll();
 
-    bool isClipboardEmpty() { return m_clipboard.count() == 0; }
+    bool isClipboardEmpty() {
+        return m_clipboard.count() == 0;
+    }
 
     void insertRow(int row, gTableWidgetRow* item);
     void insertRow(int row);

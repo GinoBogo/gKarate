@@ -13,7 +13,7 @@
 #ifndef TABLEWIDGETEXPORT_HPP
 #define TABLEWIDGETEXPORT_HPP
 
-#include "gTableWidget.hpp"
+#include "widgets/gTableWidget.hpp"
 #include "xlsxdocument.h"
 #include "xlsxworkbook.h"
 
@@ -27,7 +27,6 @@ namespace gXlsx {
         QString     category;
         QString     rank;
         QStringList athletes;
-
     } PeopleRecord;
 
     void decodeTableWidget(gTableWidget* src_table, PeopleRecord& dst_record);

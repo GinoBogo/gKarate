@@ -13,12 +13,12 @@
 #ifndef GTABLEWIDGET_HPP
 #define GTABLEWIDGET_HPP
 
+#include "gTableWidgetRows.hpp"
+
 #include <QAction>
 #include <QList>
 #include <QMenu>
 #include <QTableWidget>
-
-#include "gTableWidgetRows.hpp"
 
 class gTableWidget : public QTableWidget {
     Q_OBJECT
@@ -29,14 +29,18 @@ class gTableWidget : public QTableWidget {
 
     void setupUi();
 
-    const QStringList& headerNames() { return m_header_names; }
+    const QStringList& headerNames() {
+        return m_header_names;
+    }
     const QStringList& headerSizes();
 
     bool setHeaderSize(const QString& name, int size);
 
     void renameMenuNames(const QStringList& names);
 
-    gTableWidgetRows* rows() { return m_rows; }
+    gTableWidgetRows* rows() {
+        return m_rows;
+    }
 
   private slots:
     void slotCustomContextMenu(const QPoint& pos);

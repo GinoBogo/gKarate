@@ -28,16 +28,29 @@ class gTableWidgetCBox : public gTableWidgetBase, public QComboBox {
     void resize(int items);
     void setupUi();
 
-    QList<QPixmap>&  images() { return m_images; }
-    const QLineEdit& lineEdit() { return m_line_edit; }
-    QString          index() const { return QString::number(currentIndex()); }
-    void             setIndex(const QString& data) { setCurrentIndex(data.toInt()); }
-    QString          text() const { return currentText(); }
-    void             setText(const QString& data) { setCurrentText(data); }
+    QList<QPixmap>& images() {
+        return m_images;
+    }
+    const QLineEdit& lineEdit() {
+        return m_line_edit;
+    }
+    QString index() const {
+        return QString::number(currentIndex());
+    }
+    void setIndex(const QString& data) {
+        setCurrentIndex(data.toInt());
+    }
+    QString text() const {
+        return currentText();
+    }
+    void setText(const QString& data) {
+        setCurrentText(data);
+    }
 
     void wheelEvent(QWheelEvent* e) {
-        if (hasFocus())
+        if (hasFocus()) {
             QComboBox::wheelEvent(e);
+        }
     }
 
   private:

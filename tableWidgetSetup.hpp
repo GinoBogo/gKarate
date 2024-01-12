@@ -13,7 +13,7 @@
 #ifndef TABLEWIDGETSETUP_HPP
 #define TABLEWIDGETSETUP_HPP
 
-#include "gTableWidgetRow.hpp"
+#include "widgets/gTableWidgetRow.hpp"
 
 extern const char* RANK_MAP[];
 

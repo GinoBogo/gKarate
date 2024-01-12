@@ -13,12 +13,11 @@
 #ifndef GXMLFILE_HPP
 #define GXMLFILE_HPP
 
-#include <QList>
+#include "gXmlNode.hpp"
 
+#include <QList>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
-
-#include "gXmlNode.hpp"
 
 class gXmlFile {
   public:
@@ -27,8 +26,12 @@ class gXmlFile {
     bool open(const QString& filepath);
     bool save(const QString& filepath);
 
-    const QString& getRootName() { return m_root.name; }
-    void           setRootName(const QString& name) { m_root.name = name; }
+    const QString& getRootName() {
+        return m_root.name;
+    }
+    void setRootName(const QString& name) {
+        m_root.name = name;
+    }
 
     gXmlNode* findNode(gXmlNode* start, const QString& name);
     gXmlNodes findNodes(gXmlNode* start, const QString& name);

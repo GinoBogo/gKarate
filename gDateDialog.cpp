@@ -11,6 +11,7 @@
  */
 
 #include "gDateDialog.hpp"
+
 #include "ui_gDateDialog.h"
 
 #include <QRegularExpression>
@@ -33,7 +34,7 @@ const QDate gDateDialog::getDate() {
 }
 
 const QString gDateDialog::date2str(const QDate& date) {
-    return QString("%1/%2/%3")
+    return QString("%1/%2/%3") //
         .arg(date.day(), 2, 10, QChar('0'))
         .arg(date.month(), 2, 10, QChar('0'))
         .arg(date.year());

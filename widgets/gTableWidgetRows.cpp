@@ -127,28 +127,33 @@ QList<gTableWidgetRow*> gTableWidgetRows::filterRows(int col, const QString& dat
 
         switch (item_ptr->type()) {
             case gTableWidgetBase::ITEM: {
-                if (data == item_ptr->toItem()->text())
+                if (data == item_ptr->toItem()->text()) {
                     list.append(row_ptr);
+                }
             } break;
 
             case gTableWidgetBase::CELL: {
-                if (data == item_ptr->toCell()->title())
+                if (data == item_ptr->toCell()->title()) {
                     list.append(row_ptr);
+                }
             } break;
 
             case gTableWidgetBase::CBOX: {
-                if (data == item_ptr->toCBox()->index())
+                if (data == item_ptr->toCBox()->index()) {
                     list.append(row_ptr);
+                }
             } break;
 
             case gTableWidgetBase::DATE: {
-                if (data == item_ptr->toDate()->date())
+                if (data == item_ptr->toDate()->date()) {
                     list.append(row_ptr);
+                }
             } break;
 
             case gTableWidgetBase::ICON: {
-                if (data == item_ptr->toIcon()->index())
+                if (data == item_ptr->toIcon()->index()) {
                     list.append(row_ptr);
+                }
             } break;
 
             default: {

@@ -27,7 +27,7 @@ gTableWidgetRow::~gTableWidgetRow() {
 }
 
 void gTableWidgetRow::clearAll() {
-    // NOTE: "gTableWidgetRow" items are removed by "gTableWidget" direclty.
+    // NOTE: "gTableWidgetRow" items are removed by "gTableWidget" directly.
     clear();
 }
 

@@ -25,9 +25,13 @@ class gTableWidgetIcon : public gTableWidgetBase, public QLabel {
   public:
     gTableWidgetIcon(gTableWidgetRow* parent);
 
-    QList<QPixmap>& images() { return m_images; }
-    QString         index() const { return QString::number(m_index); }
-    void            setIndex(const QString& data);
+    QList<QPixmap>& images() {
+        return m_images;
+    }
+    QString index() const {
+        return QString::number(m_index);
+    }
+    void setIndex(const QString& data);
 
   private:
     gTableWidgetRow* m_parent;

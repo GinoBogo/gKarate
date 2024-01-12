@@ -11,7 +11,6 @@
  */
 
 #include "gFileDialog.hpp"
-#include "qfileinfo.h"
 
 #include <QFileInfo>
 #include <QMessageBox>

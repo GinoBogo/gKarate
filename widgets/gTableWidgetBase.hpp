@@ -38,13 +38,25 @@ class gTableWidgetBase {
 
     gTableWidgetBase(BaseType type, void* widget);
 
-    gTableWidgetItem* toItem() { return (gTableWidgetItem*)m_widget; }
-    gTableWidgetCell* toCell() { return (gTableWidgetCell*)m_widget; }
-    gTableWidgetCBox* toCBox() { return (gTableWidgetCBox*)m_widget; }
-    gTableWidgetDate* toDate() { return (gTableWidgetDate*)m_widget; }
-    gTableWidgetIcon* toIcon() { return (gTableWidgetIcon*)m_widget; }
+    gTableWidgetItem* toItem() {
+        return (gTableWidgetItem*)m_widget;
+    }
+    gTableWidgetCell* toCell() {
+        return (gTableWidgetCell*)m_widget;
+    }
+    gTableWidgetCBox* toCBox() {
+        return (gTableWidgetCBox*)m_widget;
+    }
+    gTableWidgetDate* toDate() {
+        return (gTableWidgetDate*)m_widget;
+    }
+    gTableWidgetIcon* toIcon() {
+        return (gTableWidgetIcon*)m_widget;
+    }
 
-    BaseType type() { return m_type; }
+    BaseType type() {
+        return m_type;
+    }
 
   private:
     const BaseType m_type;

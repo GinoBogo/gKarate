@@ -14,7 +14,6 @@
 #define GTABLEWIDGETDATE_HPP
 
 #include "gTableWidgetBase.hpp"
-#include "qdatetimeedit.h"
 
 #include <QDate>
 #include <QDateEdit>
@@ -34,8 +33,9 @@ class gTableWidgetDate : public gTableWidgetBase, public QDateEdit {
     static const QDate   str2date(const QString& str);
 
     void wheelEvent(QWheelEvent* e) {
-        if (hasFocus())
+        if (hasFocus()) {
             QDateEdit::wheelEvent(e);
+        }
     }
 
   private slots:
