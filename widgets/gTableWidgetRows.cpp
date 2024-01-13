@@ -48,7 +48,7 @@ void gTableWidgetRows::insertRow(int row, gTableWidgetRow* item) {
 }
 
 void gTableWidgetRows::insertRow(int row) {
-    auto item = new gTableWidgetRow(this, f_setupRow);
+    auto* item = new gTableWidgetRow(this, f_setupRow);
     insertRow(row, item);
 }
 
@@ -170,7 +170,7 @@ void gTableWidgetRows::connectRowToTable(int row) {
 
     auto N = row_ptr->count();
     for (decltype(N) col{0}; col < N; ++col) {
-        auto item_ptr = row_ptr->at(col);
+        auto* item_ptr = row_ptr->at(col);
 
         switch (item_ptr->type()) {
             case gTableWidgetBase::ITEM: {

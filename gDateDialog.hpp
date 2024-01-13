@@ -19,7 +19,7 @@
 
 namespace Ui {
     class gDateDialog;
-}
+} // namespace Ui
 
 class gDateDialog : public QDialog {
     Q_OBJECT
