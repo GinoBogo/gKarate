@@ -488,8 +488,8 @@ void gMainWidget::slotButton_ExportKumite() {
         auto selected = m_saveExport->selected;
         __export_sanitizer(selected);
 
-        auto register_filename = selected + "_register.xlsx";
-        auto evaluate_filename = selected + "_evaluate.xlsx";
+        auto register_filename = selected + reference + "_register.xlsx";
+        auto evaluate_filename = selected + reference + "_evaluate.xlsx";
 
         QXlsx::Document register_xlsx;
         QXlsx::Document evaluate_xlsx;
