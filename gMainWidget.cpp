@@ -12,17 +12,34 @@
 
 #include "gMainWidget.hpp"
 
-#include "gTableWidgetRows.hpp"
+#include "gDateDialog.hpp"
+#include "gFileDialog.hpp"
 #include "libs/gXmlFile.hpp"
+#include "libs/gXmlNode.hpp"
+#include "libs/gXmlPair.hpp"
+#include "qxlsx/xlsxdocument.h"
 #include "tableWidgetExport.hpp"
 #include "tableWidgetSetup.hpp"
 #include "ui_gMainWidget.h"
+#include "widgets/gTableWidgetRow.hpp"
+#include "widgets/gTableWidgetRows.hpp"
 
-#include <QByteArray>
-#include <QDir>
-#include <QRegularExpression>
-#include <algorithm> // sort
-#include <random>    // random_device
+#include <algorithm>
+#include <qapplication.h>
+#include <qcombobox.h>
+#include <qcontainerfwd.h>
+#include <qdatetime.h>
+#include <qdialog.h>
+#include <qdir.h>
+#include <qfiledialog.h>
+#include <qfileinfo.h>
+#include <qforeach.h>
+#include <qlogging.h>
+#include <qnamespace.h>
+#include <qstring.h>
+#include <qstringliteral.h>
+#include <qwidget.h>
+#include <random>
 
 gMainWidget::gMainWidget(QWidget* parent) : QWidget(parent), ui(new Ui::gMainWidget) {
 
@@ -98,7 +115,7 @@ QString gMainWidget::getDocName() const {
     auto title = windowTitle().split(" - ");
     if (title.count() > 1) {
         name = title.at(0);
-        name.replace(".dojo", "");
+        name.replace(".dojo", "", Qt::CaseInsensitive);
     }
 
     return name;
@@ -192,14 +209,14 @@ void gMainWidget::saveConfig(const QString& filename) {
     { // SEGMENT "geometry"
         gXmlNode* node_A = xmlFile.insertNode(node_1, "geometry");
 
-        gXmlPair pair("data", gXmlPair::byte2str(saveGeometry()));
+        gXmlPair const pair("data", gXmlPair::byte2str(saveGeometry()));
         node_A->attributes.append(pair);
     }
 
     { // SEGMENT "directory"
         gXmlNode* node_A = xmlFile.insertNode(node_1, "directory");
 
-        gXmlPair pair("data", gXmlPair::str2hex(m_directory));
+        gXmlPair const pair("data", gXmlPair::str2hex(m_directory));
         node_A->attributes.append(pair);
     }
 
@@ -292,7 +309,7 @@ void gMainWidget::slotButton_MatchDate() {
 }
 
 void gMainWidget::slotButton_FileNew() {
-    m_document = "senza nome";
+    m_document = "senza_nome";
     updateWindowTitle();
 
     clearTab1_Match();
@@ -446,7 +463,7 @@ void gMainWidget::slotButton_ReorderKumite() {
     tableWidget_ReorderPeople(ui->tableWidget_peopleKumite);
 }
 
-void __export_sanitizer(QString& selected) {
+void export_sanitizer(QString& selected) {
     auto m1 = QStringLiteral("((_register)|(_evaluate))(.xlsx)");
     auto r1 = QRegularExpression(m1, QRegularExpression::CaseInsensitiveOption);
     selected.remove(r1);
@@ -461,7 +478,7 @@ void gMainWidget::slotButton_ExportKata() {
 
     if (m_saveExport->show(m_directory, getDocName() + reference)) {
         auto selected = m_saveExport->selected;
-        __export_sanitizer(selected);
+        export_sanitizer(selected);
 
         auto register_filename = selected + reference + "_register.xlsx";
         auto evaluate_filename = selected + reference + "_evaluate.xlsx";
@@ -486,7 +503,7 @@ void gMainWidget::slotButton_ExportKumite() {
 
     if (m_saveExport->show(m_directory, getDocName())) {
         auto selected = m_saveExport->selected;
-        __export_sanitizer(selected);
+        export_sanitizer(selected);
 
         auto register_filename = selected + reference + "_register.xlsx";
         auto evaluate_filename = selected + reference + "_evaluate.xlsx";

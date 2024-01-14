@@ -12,7 +12,13 @@
 
 #include "gXmlFile.hpp"
 
-#include <QFileInfo>
+#include "gXmlNode.hpp"
+#include "gXmlPair.hpp"
+
+#include <qfileinfo.h>
+#include <qforeach.h>
+#include <qiodevice.h>
+#include <qxmlstream.h>
 
 gXmlFile::gXmlFile() {
     m_root.name = "root";

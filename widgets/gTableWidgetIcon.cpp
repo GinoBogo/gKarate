@@ -12,7 +12,11 @@
 
 #include "gTableWidgetIcon.hpp"
 
+#include "gTableWidgetBase.hpp"
 #include "gTableWidgetRow.hpp"
+
+#include <qnamespace.h>
+#include <qstring.h>
 
 gTableWidgetIcon::gTableWidgetIcon(gTableWidgetRow* parent) : gTableWidgetBase(ICON, this) {
     m_parent = parent;

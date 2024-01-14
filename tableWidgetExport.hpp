@@ -13,9 +13,12 @@
 #ifndef TABLEWIDGETEXPORT_HPP
 #define TABLEWIDGETEXPORT_HPP
 
+#include "qxlsx/xlsxdocument.h"
+#include "qxlsx/xlsxworkbook.h"
 #include "widgets/gTableWidget.hpp"
-#include "xlsxdocument.h"
-#include "xlsxworkbook.h"
+
+#include <QString>
+#include <QStringList>
 
 namespace gXlsx {
     const int max_register_lines = 32;

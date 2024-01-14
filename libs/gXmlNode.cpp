@@ -12,6 +12,8 @@
 
 #include "gXmlNode.hpp"
 
+#include <qforeach.h>
+
 gXmlNode::gXmlNode(gXmlNode* parent) {
     this->parent = parent;
 

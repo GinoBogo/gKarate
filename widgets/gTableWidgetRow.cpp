@@ -12,7 +12,10 @@
 
 #include "gTableWidgetRow.hpp"
 
+#include "gTableWidgetBase.hpp"
 #include "gTableWidgetRows.hpp"
+
+#include <qcontainerfwd.h>
 
 gTableWidgetRow::gTableWidgetRow(gTableWidgetRows* parent, func_setupRow setupRow) {
     m_parent = parent;

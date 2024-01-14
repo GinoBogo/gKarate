@@ -14,6 +14,13 @@
 
 #include "gTableWidgetBase.hpp"
 
+#include <qabstractspinbox.h>
+#include <qcontainerfwd.h>
+#include <qdatetime.h>
+#include <qdatetimeedit.h>
+#include <qnamespace.h>
+#include <qstring.h>
+
 gTableWidgetDate::gTableWidgetDate(gTableWidgetRow* parent) : gTableWidgetBase(DATE, this) {
     m_parent = parent;
     m_target = QDate::currentDate();
@@ -82,14 +89,14 @@ const QString gTableWidgetDate::date2str(const QDate& date) {
 const QDate gTableWidgetDate::str2date(const QString& str) {
     QDate date;
 
-    static QRegularExpression re("[/ -.]");
+    static QRegularExpression const re("[/ -.]");
 
-    QStringList list = str.split(re, Qt::SkipEmptyParts);
+    QStringList const list = str.split(re, Qt::SkipEmptyParts);
 
     if (list.count() == 3) {
-        int D = list.at(0).toInt();
-        int M = list.at(1).toInt();
-        int Y = list.at(2).toInt();
+        int const D = list.at(0).toInt();
+        int const M = list.at(1).toInt();
+        int const Y = list.at(2).toInt();
 
         date.setDate(Y, M, D);
     }

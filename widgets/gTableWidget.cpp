@@ -12,6 +12,18 @@
 
 #include "gTableWidget.hpp"
 
+#include "gTableWidgetRows.hpp"
+
+#include <qcontainerfwd.h>
+#include <qfont.h>
+#include <qforeach.h>
+#include <qmenu.h>
+#include <qnamespace.h>
+#include <qpoint.h>
+#include <qstring.h>
+#include <qtablewidget.h>
+#include <qwidget.h>
+
 #define CONNECT_MENU(index, slot) \
     connect(m_actions.at(index), &QAction::triggered, this, &gTableWidget::slot);
 

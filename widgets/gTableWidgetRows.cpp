@@ -13,9 +13,11 @@
 #include "gTableWidgetRows.hpp"
 
 #include "gTableWidget.hpp"
+#include "gTableWidgetBase.hpp"
 #include "gTableWidgetRow.hpp"
 
-#include <algorithm> // max, min
+#include <algorithm>
+#include <qcontainerfwd.h>
 
 gTableWidgetRows::gTableWidgetRows(gTableWidget* parent) {
     m_parent   = parent;

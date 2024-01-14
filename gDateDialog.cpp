@@ -14,8 +14,13 @@
 
 #include "ui_gDateDialog.h"
 
-#include <QRegularExpression>
-#include <QStringList>
+#include <qchar.h>
+#include <qcontainerfwd.h>
+#include <qdatetime.h>
+#include <qdialog.h>
+#include <qnamespace.h>
+#include <qregularexpression.h>
+#include <qwidget.h>
 
 gDateDialog::gDateDialog(QWidget* parent) : QDialog(parent), ui(new Ui::gDateDialog) {
     ui->setupUi(this);
@@ -43,14 +48,14 @@ const QString gDateDialog::date2str(const QDate& date) {
 const QDate gDateDialog::str2date(const QString& str) {
     QDate date;
 
-    static QRegularExpression re("[/ -.]");
+    static QRegularExpression const re("[/ -.]");
 
-    QStringList list = str.split(re, Qt::SkipEmptyParts);
+    QStringList const list = str.split(re, Qt::SkipEmptyParts);
 
     if (list.count() == 3) {
-        int D = list.at(0).toInt();
-        int M = list.at(1).toInt();
-        int Y = list.at(2).toInt();
+        int const D = list.at(0).toInt();
+        int const M = list.at(1).toInt();
+        int const Y = list.at(2).toInt();
 
         date.setDate(Y, M, D);
     }

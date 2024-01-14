@@ -12,6 +12,16 @@
 
 #include "tableWidgetSetup.hpp"
 
+#include "widgets/gTableWidgetBase.hpp"
+#include "widgets/gTableWidgetRow.hpp"
+
+#include <qcontainerfwd.h>
+#include <qforeach.h>
+#include <qlist.h>
+#include <qnamespace.h>
+#include <qpixmap.h>
+#include <qsize.h>
+
 const char* RANK_MAP[] = {
     "BIANCA",           //  0
     "BIANCA-GIALLA",    //  1
@@ -42,16 +52,16 @@ QStringList setup_menu_names = {
 void setupRow_Full(gTableWidgetRow* row_ptr) {
     if (row_ptr != nullptr) {
         // NOTE: automatic downcasting
-        QList<gTableWidgetBase*> items =     //
-            {new gTableWidgetItem(row_ptr),  // 0 Cognome
-             new gTableWidgetItem(row_ptr),  // 1 Nome
-             new gTableWidgetDate(row_ptr),  // 2 Data di Nascita
-             new gTableWidgetCBox(row_ptr),  // 3 Categoria
-             new gTableWidgetCBox(row_ptr),  // 4 Grado
-             new gTableWidgetCBox(row_ptr),  // 5 Pratica
-             new gTableWidgetCBox(row_ptr),  // 6 Stile
-             new gTableWidgetItem(row_ptr),  // 7 Società
-             new gTableWidgetItem(row_ptr)}; // 8 Riferimento
+        QList<gTableWidgetBase*> const items = //
+            {new gTableWidgetItem(row_ptr),    // 0 Cognome
+             new gTableWidgetItem(row_ptr),    // 1 Nome
+             new gTableWidgetDate(row_ptr),    // 2 Data di Nascita
+             new gTableWidgetCBox(row_ptr),    // 3 Categoria
+             new gTableWidgetCBox(row_ptr),    // 4 Grado
+             new gTableWidgetCBox(row_ptr),    // 5 Pratica
+             new gTableWidgetCBox(row_ptr),    // 6 Stile
+             new gTableWidgetItem(row_ptr),    // 7 Società
+             new gTableWidgetItem(row_ptr)};   // 8 Riferimento
 
         items.at(2)->toDate()->setDate("31/12/2016");
 
@@ -101,7 +111,7 @@ void setupRow_Full(gTableWidgetRow* row_ptr) {
 void setupRow_Mini(gTableWidgetRow* row_ptr) {
     if (row_ptr != nullptr) {
         // NOTE: automatic downcasting
-        QList<gTableWidgetBase*> items = //
+        QList<gTableWidgetBase*> const items = //
             {
                 new gTableWidgetItem(row_ptr), // 0 Cognome
                 new gTableWidgetItem(row_ptr), // 1 Nome

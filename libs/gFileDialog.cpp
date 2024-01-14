@@ -12,8 +12,11 @@
 
 #include "gFileDialog.hpp"
 
-#include <QFileInfo>
-#include <QMessageBox>
+#include <qdialog.h>
+#include <qfiledialog.h>
+#include <qfileinfo.h>
+#include <qstring.h>
+#include <qwidget.h>
 
 gFileDialog::gFileDialog(QWidget* parent, AcceptMode mode) : QFileDialog(parent) {
 
@@ -51,7 +54,7 @@ bool gFileDialog::show(QString& directory, const QString& filename) {
         const auto& list = selectedFiles();
 
         if (list.count() > 0) {
-            QFileInfo info(list.at(0));
+            QFileInfo const info(list.at(0));
             selected  = info.absoluteFilePath();
             directory = info.absolutePath();
             return true;

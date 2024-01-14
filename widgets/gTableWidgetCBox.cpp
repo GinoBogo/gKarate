@@ -12,7 +12,10 @@
 
 #include "gTableWidgetCBox.hpp"
 
+#include "gTableWidgetBase.hpp"
 #include "gTableWidgetRow.hpp"
+
+#include <qnamespace.h>
 
 gTableWidgetCBox::gTableWidgetCBox(gTableWidgetRow* parent) : gTableWidgetBase(CBOX, this) {
     m_parent = parent;
