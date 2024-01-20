@@ -51,6 +51,17 @@ bool gFileDialog::show(QString& directory, const QString& filename) {
         selectFile(filename);
     }
 
+    auto* parent = parentWidget();
+    if (parent != nullptr) {
+        auto rect_1 = parent->normalGeometry();
+        auto rect_2 = normalGeometry();
+
+        auto pos_x = rect_1.x() + (rect_1.width() - rect_2.width()) / 2;
+        auto pos_y = rect_1.y() + (rect_1.height() - rect_2.height()) / 2;
+
+        move(pos_x, pos_y);
+    }
+
     if (exec() == QDialog::Accepted) {
         const auto& list = selectedFiles();
 
