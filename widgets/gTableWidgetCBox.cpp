@@ -17,8 +17,9 @@
 
 #include <qnamespace.h>
 
-gTableWidgetCBox::gTableWidgetCBox(gTableWidgetRow* parent) : gTableWidgetBase(CBOX, this) {
-    m_parent = parent;
+gTableWidgetCBox::gTableWidgetCBox(gTableWidgetRow* parent) :
+gTableWidgetBase(CBOX, this),
+m_parent(parent) {
 
     m_line_edit.setReadOnly(true);
     m_line_edit.setAlignment(Qt::AlignCenter);
@@ -52,8 +53,12 @@ void gTableWidgetCBox::resize(int items) {
 void gTableWidgetCBox::setupUi() {
     auto N = count();
 
-    for (decltype(N) i{0}; i < N; ++i) {
+    for (decltype(N) i(0); i < N; ++i) {
         setItemData(i, m_images.at(i), Qt::DecorationRole);
         setItemData(i, Qt::AlignCenter, Qt::TextAlignmentRole);
     }
 }
+
+/* =============================================================================
+   End of file
+ */

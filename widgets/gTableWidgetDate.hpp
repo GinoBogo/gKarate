@@ -25,14 +25,14 @@ class gTableWidgetDate : public gTableWidgetBase, public QDateEdit {
   public:
     gTableWidgetDate(gTableWidgetRow* parent);
 
-    QString date() const;
-    void    setDate(const QString& value);
-    void    setTargetDate(const QString& value);
+    [[nodiscard]] QString date() const;
+    void                  setDate(const QString& value);
+    void                  setTargetDate(const QString& value);
 
-    static const QString date2str(const QDate& date);
-    static const QDate   str2date(const QString& str);
+    static QString date2str(const QDate& date);
+    static QDate   str2date(const QString& str);
 
-    void wheelEvent(QWheelEvent* e) {
+    void wheelEvent(QWheelEvent* e) override {
         if (hasFocus()) {
             QDateEdit::wheelEvent(e);
         }

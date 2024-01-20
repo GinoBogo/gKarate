@@ -21,8 +21,10 @@
 #include <qnamespace.h>
 #include <qstring.h>
 
-gTableWidgetDate::gTableWidgetDate(gTableWidgetRow* parent) : gTableWidgetBase(DATE, this) {
-    m_parent = parent;
+gTableWidgetDate::gTableWidgetDate(gTableWidgetRow* parent) :
+gTableWidgetBase(DATE, this),
+m_parent(parent) {
+
     m_target = QDate::currentDate();
 
     setAlignment(Qt::AlignCenter);
@@ -57,18 +59,16 @@ void gTableWidgetDate::slotDateChanged(QDate date) {
         date      = temp;
     }
 
-    auto Y = 0;
-    auto M = 0;
-    auto D = 0;
+    auto Y = stop.year() - date.year();
+    auto M = stop.month() - date.month();
+    auto D = stop.day() - date.day();
 
-    Y = stop.year() - date.year();
-
-    if ((M = stop.month() - date.month()) < 0) {
+    if (M < 0) {
         Y -= 1;
         M += 12;
     }
 
-    if ((D = stop.day() - date.day()) < 0) {
+    if (D < 0) {
         if (--M < 0) {
             Y -= 1;
             M += 12;
@@ -79,14 +79,14 @@ void gTableWidgetDate::slotDateChanged(QDate date) {
     setToolTip(QString("%1Y %2M %3D").arg(Y).arg(M).arg(D));
 }
 
-const QString gTableWidgetDate::date2str(const QDate& date) {
+QString gTableWidgetDate::date2str(const QDate& date) {
     return QString("%1/%2/%3") //
         .arg(date.day(), 2, 10, QChar('0'))
         .arg(date.month(), 2, 10, QChar('0'))
         .arg(date.year());
 }
 
-const QDate gTableWidgetDate::str2date(const QString& str) {
+QDate gTableWidgetDate::str2date(const QString& str) {
     QDate date;
 
     static QRegularExpression const re("[/ -.]");
@@ -94,12 +94,16 @@ const QDate gTableWidgetDate::str2date(const QString& str) {
     QStringList const list = str.split(re, Qt::SkipEmptyParts);
 
     if (list.count() == 3) {
-        int const D = list.at(0).toInt();
-        int const M = list.at(1).toInt();
-        int const Y = list.at(2).toInt();
+        auto D = list.at(0).toInt();
+        auto M = list.at(1).toInt();
+        auto Y = list.at(2).toInt();
 
         date.setDate(Y, M, D);
     }
 
     return date;
 }
+
+/* =============================================================================
+   End of file
+ */

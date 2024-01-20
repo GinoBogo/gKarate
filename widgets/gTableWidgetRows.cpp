@@ -19,9 +19,9 @@
 #include <algorithm>
 #include <qcontainerfwd.h>
 
-gTableWidgetRows::gTableWidgetRows(gTableWidget* parent) {
-    m_parent   = parent;
-    f_setupRow = nullptr;
+gTableWidgetRows::gTableWidgetRows(gTableWidget* parent) :
+m_parent(parent),
+f_setupRow(nullptr) {
 }
 
 gTableWidgetRows::~gTableWidgetRows() {
@@ -105,7 +105,7 @@ QList<QStringList> gTableWidgetRows::cellsData() {
     QList<QStringList> list;
 
     auto N = count();
-    for (decltype(N) i{0}; i < N; ++i) {
+    for (decltype(N) i(0); i < N; ++i) {
         list.append(at(i)->cellData());
     }
 
@@ -114,7 +114,7 @@ QList<QStringList> gTableWidgetRows::cellsData() {
 
 void gTableWidgetRows::setCellsData(const QList<QStringList>& list) {
     auto N = count();
-    for (decltype(N) i{0}; i < N; ++i) {
+    for (decltype(N) i(0); i < N; ++i) {
         at(i)->setCellData(list.at(i));
     }
 }
@@ -123,7 +123,7 @@ QList<gTableWidgetRow*> gTableWidgetRows::filterRows(int col, const QString& dat
     QList<gTableWidgetRow*> list;
 
     auto N = count();
-    for (decltype(N) i{0}; i < N; ++i) {
+    for (decltype(N) i(0); i < N; ++i) {
         auto* row_ptr  = at(i);
         auto* item_ptr = row_ptr->at(col);
 
@@ -170,7 +170,7 @@ QList<gTableWidgetRow*> gTableWidgetRows::filterRows(int col, const QString& dat
 void gTableWidgetRows::connectRowToTable(int row) {
     auto* row_ptr = at(row);
 
-    auto N = row_ptr->count();
+    auto N = (int)row_ptr->count();
     for (decltype(N) col{0}; col < N; ++col) {
         auto* item_ptr = row_ptr->at(col);
 
@@ -201,3 +201,7 @@ void gTableWidgetRows::connectRowToTable(int row) {
         }
     }
 }
+
+/* =============================================================================
+   End of file
+ */

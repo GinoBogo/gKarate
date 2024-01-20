@@ -39,19 +39,19 @@ class gTableWidgetBase {
     gTableWidgetBase(BaseType type, void* widget);
 
     gTableWidgetItem* toItem() {
-        return (gTableWidgetItem*)m_widget;
+        return static_cast<gTableWidgetItem*>(m_widget);
     }
     gTableWidgetCell* toCell() {
-        return (gTableWidgetCell*)m_widget;
+        return static_cast<gTableWidgetCell*>(m_widget);
     }
     gTableWidgetCBox* toCBox() {
-        return (gTableWidgetCBox*)m_widget;
+        return static_cast<gTableWidgetCBox*>(m_widget);
     }
     gTableWidgetDate* toDate() {
-        return (gTableWidgetDate*)m_widget;
+        return static_cast<gTableWidgetDate*>(m_widget);
     }
     gTableWidgetIcon* toIcon() {
-        return (gTableWidgetIcon*)m_widget;
+        return static_cast<gTableWidgetIcon*>(m_widget);
     }
 
     BaseType type() {
@@ -59,8 +59,8 @@ class gTableWidgetBase {
     }
 
   private:
-    const BaseType m_type;
-    void*          m_widget;
+    BaseType m_type;
+    void*    m_widget;
 };
 
 #endif // GTABLEWIDGETBASE_HPP

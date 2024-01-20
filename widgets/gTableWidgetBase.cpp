@@ -12,5 +12,11 @@
 
 #include "gTableWidgetBase.hpp"
 
-gTableWidgetBase::gTableWidgetBase(BaseType type, void* widget) : m_type{type}, m_widget{widget} {
+gTableWidgetBase::gTableWidgetBase(BaseType type, void* widget) :
+m_type{type},
+m_widget{widget} {
 }
+
+/* =============================================================================
+   End of file
+ */

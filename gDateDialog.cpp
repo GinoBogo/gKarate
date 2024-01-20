@@ -22,7 +22,10 @@
 #include <qregularexpression.h>
 #include <qwidget.h>
 
-gDateDialog::gDateDialog(QWidget* parent) : QDialog(parent), ui(new Ui::gDateDialog) {
+gDateDialog::gDateDialog(QWidget* parent) :
+QDialog(parent),
+ui(new Ui::gDateDialog) {
+
     ui->setupUi(this);
 }
 
@@ -30,22 +33,22 @@ gDateDialog::~gDateDialog() {
     delete ui;
 }
 
-void gDateDialog::setDate(const QDate& date) {
+void gDateDialog::setDate(const QDate& date) const {
     ui->calendarWidget->setSelectedDate(date);
 }
 
-const QDate gDateDialog::getDate() {
+QDate gDateDialog::getDate() const {
     return ui->calendarWidget->selectedDate();
 }
 
-const QString gDateDialog::date2str(const QDate& date) {
+QString gDateDialog::date2str(const QDate& date) {
     return QString("%1/%2/%3") //
         .arg(date.day(), 2, 10, QChar('0'))
         .arg(date.month(), 2, 10, QChar('0'))
         .arg(date.year());
 }
 
-const QDate gDateDialog::str2date(const QString& str) {
+QDate gDateDialog::str2date(const QString& str) {
     QDate date;
 
     static QRegularExpression const re("[/ -.]");
@@ -72,3 +75,7 @@ void gDateDialog::slotButton_Select() {
     setResult(QDialog::Accepted);
     hide();
 }
+
+/* =============================================================================
+   End of file
+ */

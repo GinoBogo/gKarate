@@ -11,4 +11,4 @@ echo "path:" $path
 
 cd $path/../build/debug
 
-"/usr/bin/make" clean -j8
+cmake --build ./ --target clean -j8

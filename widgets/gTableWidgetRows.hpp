@@ -47,7 +47,7 @@ class gTableWidgetRows : public QList<gTableWidgetRow*> {
     QList<QStringList> cellsData();
     void               setCellsData(const QList<QStringList>& list);
 
-    QList<gTableWidgetRow*> filterRows(int col, const QString& data) const;
+    [[nodiscard]] QList<gTableWidgetRow*> filterRows(int col, const QString& data) const;
 
   private:
     void connectRowToTable(int row);

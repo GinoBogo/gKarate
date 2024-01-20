@@ -11,6 +11,8 @@ function DeleteItem {
 
 # DeleteItem("../build")
 
-Set-Location "../build"
+Push-Location "../build/debug"
 
-mingw32-make.exe clean -j4
+cmake.exe --build ./ --target clean
+
+Pop-Location

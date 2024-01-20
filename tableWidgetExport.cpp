@@ -12,12 +12,11 @@
 
 #include "tableWidgetExport.hpp"
 
+#include "qxlsx/xlsxcellrange.h"
+#include "qxlsx/xlsxdocument.h"
+#include "qxlsx/xlsxformat.h"
 #include "tableWidgetSetup.hpp"
 #include "widgets/gTableWidget.hpp"
-#include "xlsxcellrange.h"
-#include "xlsxchart.h"
-#include "xlsxdocument.h"
-#include "xlsxformat.h"
 
 #include <algorithm>
 #include <qcolor.h>
@@ -30,11 +29,6 @@ using namespace QXlsx;
 const auto color_kata   = QColor(235, 235, 255);
 const auto color_kumite = QColor(235, 255, 235);
 
-#define _
-#define __
-#define ___
-#define ____
-
 void gXlsx::decodeTableWidget(gTableWidget* src_table, PeopleRecord& dst_record) {
     if (src_table != nullptr) {
         dst_record.athletes.clear();
@@ -42,7 +36,7 @@ void gXlsx::decodeTableWidget(gTableWidget* src_table, PeopleRecord& dst_record)
         const auto* rows = src_table->rows();
 
         auto N = rows->count();
-        for (decltype(N) i{0}; i < N; ++i) {
+        for (decltype(N) i(0); i < N; ++i) {
             const auto* row = rows->at(i);
 
             if (i == 0) {
@@ -53,13 +47,13 @@ void gXlsx::decodeTableWidget(gTableWidget* src_table, PeopleRecord& dst_record)
                 dst_record.category = row->at(MINI_CATEGORY)->toItem()->text();
                 dst_record.rank     = RANK_MAP[rank];
             }
-
+            // clang-format off
             const auto athlete = QString("%1;%2;%3;%4")
                                      .arg(row->at(MINI_SURNAME)->toItem()->text(),
-                                          row->at(MINI_NAME __)->toItem()->text(),
+                                          row->at(MINI_NAME   )->toItem()->text(),
                                           row->at(MINI_SOCIETY)->toItem()->text(),
-                                          row->at(MINI_STYLE _)->toItem()->text());
-
+                                          row->at(MINI_STYLE  )->toItem()->text());
+            // clang-format on
             dst_record.athletes.append(athlete);
         }
     }
@@ -111,34 +105,35 @@ void createTitle_registerCommon(QXlsx::Document& document, gXlsx::PeopleRecord& 
     const auto& category = QString("CATEGORIA:  %1").arg(record.category);
     const auto& rank     = QString("GRADO:  %1").arg(record.rank);
 
-    int r2, c2;
+    int r2 = 0;
+    int c2 = 0;
 
     document.write(r1, c1, record.title);
-    merge_cells(document, header_1, r1, c1, 3, 20, &r2, 0);
+    merge_cells(document, header_1, r1, c1, 3, 20, &r2, nullptr);
 
     document.write(r2, c1, "VERBALE DI ISCRIZIONE");
-    merge_cells(document, header_1, r2, c1, 3, 20, &r2, 0);
+    merge_cells(document, header_1, r2, c1, 3, 20, &r2, nullptr);
 
     document.write(r2, c1, record.practice);
-    merge_cells(document, header_1, r2, c1, 2, 20, &r2, 0);
+    merge_cells(document, header_1, r2, c1, 2, 20, &r2, nullptr);
 
     document.write(r2, c1, category);
-    merge_cells(document, header_2, r2, c1, 2, 10, 0, &c2);
+    merge_cells(document, header_2, r2, c1, 2, 10, nullptr, &c2);
 
     document.write(r2, c2, rank);
-    merge_cells(document, header_2, r2, c2, 2, 10, &r2, 0);
+    merge_cells(document, header_2, r2, c2, 2, 10, &r2, nullptr);
 
     document.write(r2, c1, "NUM.");
-    merge_cells(document, header_3, r2, c1, 1, 2, 0, &c2);
+    merge_cells(document, header_3, r2, c1, 1, 2, nullptr, &c2);
 
     document.write(r2, c2, "COGNOME E NOME");
-    merge_cells(document, header_3, r2, c2, 1, 7, 0, &c2);
+    merge_cells(document, header_3, r2, c2, 1, 7, nullptr, &c2);
 
-    document.write(r2, c2, "SOCIETA'");
-    merge_cells(document, header_3, r2, c2, 1, 7, 0, &c2);
+    document.write(r2, c2, "SOCIETÀ");
+    merge_cells(document, header_3, r2, c2, 1, 7, nullptr, &c2);
 
     document.write(r2, c2, "STILE");
-    merge_cells(document, header_3, r2, c2, 1, 4, 0, 0);
+    merge_cells(document, header_3, r2, c2, 1, 4, nullptr, nullptr);
 }
 
 void createRow_registerCommon(QXlsx::Document& document, int index, int r1, int c1) {
@@ -155,10 +150,10 @@ void createRow_registerCommon(QXlsx::Document& document, int index, int r1, int 
     lines_left.setFontSize(11);
 
     // clang-format off
-    merge_cells(document, lines_center, r1, c1, 1, 2, 0, &c1);
-    merge_cells(document, lines_left  , r1, c1, 1, 7, 0, &c1);
-    merge_cells(document, lines_left  , r1, c1, 1, 7, 0, &c1);
-    merge_cells(document, lines_center, r1, c1, 1, 4, 0, 0);
+    merge_cells(document, lines_center, r1, c1, 1, 2, nullptr,     &c1);
+    merge_cells(document, lines_left  , r1, c1, 1, 7, nullptr,     &c1);
+    merge_cells(document, lines_left  , r1, c1, 1, 7, nullptr,     &c1);
+    merge_cells(document, lines_center, r1, c1, 1, 4, nullptr, nullptr);
     // clang-format on
 
     document.write(r1, 2, QString("%1.").arg(index));
@@ -182,8 +177,8 @@ void gXlsx::createSheetRegister(QXlsx::Document& document, PeopleRecord& record,
         createRow_registerCommon(document, index, 13 + i, 2);
     }
 
-    auto N = record.athletes.count();
-    for (decltype(N) i{0}; i < N; ++i) {
+    auto N = (int)record.athletes.count();
+    for (decltype(N) i(0); i < N; ++i) {
         auto athlete = record.athletes.at(i).split(";", Qt::SkipEmptyParts);
         if (athlete.count() > 2) {
             document.write(13 + i, 04, athlete.at(0) + ", " + athlete.at(1));
@@ -202,32 +197,33 @@ void createTitle_evaluateKata(QXlsx::Document& document, int r1, int c1) {
     frame.setFontBold(true);
     frame.setFontSize(9);
 
-    int c2;
-    merge_cells(document, frame, r1, c1, 1, 8, 0, &c2);
-    document.write(r1, c2 - 8, "COGNOME E NOME");
+    int c2 = 0;
 
-    merge_cells(document, frame, r1, c2, 1, 10, 0, &c2);
-    document.write(r1, c2 - 10, "SOCIETA' E STILE");
+    merge_cells(document, frame, r1, c1, 1, 8, nullptr, &c2);
+    document.write(r1, c2 - 8, "COGNOME, NOME");
 
-    merge_cells(document, frame, r1, c2, 1, 10, 0, &c2);
+    merge_cells(document, frame, r1, c2, 1, 10, nullptr, &c2);
+    document.write(r1, c2 - 10, "SOCIETÀ, STILE");
+
+    merge_cells(document, frame, r1, c2, 1, 10, nullptr, &c2);
     document.write(r1, c2 - 10, "1° KATA");
 
-    merge_cells(document, frame, r1, c2, 1, 3, 0, &c2);
+    merge_cells(document, frame, r1, c2, 1, 3, nullptr, &c2);
     document.write(r1, c2 - 3, "NOTE");
 
-    merge_cells(document, frame, r1, c2, 1, 10, 0, &c2);
+    merge_cells(document, frame, r1, c2, 1, 10, nullptr, &c2);
     document.write(r1, c2 - 10, "2° KATA");
 
-    merge_cells(document, frame, r1, c2, 1, 3, 0, &c2);
+    merge_cells(document, frame, r1, c2, 1, 3, nullptr, &c2);
     document.write(r1, c2 - 3, "NOTE");
 
-    merge_cells(document, frame, r1, c2, 1, 10, 0, &c2);
+    merge_cells(document, frame, r1, c2, 1, 10, nullptr, &c2);
     document.write(r1, c2 - 10, "3° KATA");
 
-    merge_cells(document, frame, r1, c2, 1, 3, 0, &c2);
+    merge_cells(document, frame, r1, c2, 1, 3, nullptr, &c2);
     document.write(r1, c2 - 3, "NOTE");
 
-    merge_cells(document, frame, r1, c2, 1, 9, 0, &c2);
+    merge_cells(document, frame, r1, c2, 1, 9, nullptr, &c2);
     document.write(r1, c2 - 9, "CLASSIFICA FINALE");
 }
 
@@ -254,7 +250,7 @@ void createPodium_evaluateKata(QXlsx::Document& document, int r1, int c1) {
         document.write(r1 - 2, c1, QString("%1.").arg(i));
     }
 
-    merge_cells(document, frame, r1, c1, 2, 9, &r1, 0);
+    merge_cells(document, frame, r1, c1, 2, 9, &r1);
     document.write(r1 - 2, c1, "PODIO  . . . . . . . . . . . . .");
 
     for (int i = 1; i <= 4; ++i) {
@@ -280,19 +276,19 @@ void createRow_evaluateKata(QXlsx::Document& document, int r1, int c1) {
     frame.setTextWrap(true);
 
     // clang-format off
-    int c2;
-    merge_cells(document, frame, r1    , c1, 2,  8, 0, &c2);
-    merge_cells(document, frame, r1    , c2, 1, 10, 0,   0);
-    merge_cells(document, frame, r1 + 1, c2, 1, 10, 0, &c2);
+    int c2 = 0;
+
+    merge_cells(document, frame, r1, c1, 2,  8, nullptr, &c2);
+    merge_cells(document, frame, r1, c2, 2, 10, nullptr, &c2);
 
     for (int i = 0; i < 3; ++i) {
         for (int j = 0; j < 5; ++j) {
-            merge_cells(document, frame, r1, c2, 1, 2, 0, &c2);
+            merge_cells(document, frame, r1, c2, 1, 2, nullptr, &c2);
         }
         c2 -= 2 * 5;
-        merge_cells(document, frame, r1 + 1, c2, 1, 7, 0, &c2);
-        merge_cells(document, frame, r1 + 1, c2, 1, 3, 0, &c2);
-        merge_cells(document, frame, r1    , c2, 2, 3, 0, &c2);
+        merge_cells(document, frame, r1 + 1, c2, 1, 7, nullptr, &c2);
+        merge_cells(document, frame, r1 + 1, c2, 1, 3, nullptr, &c2);
+        merge_cells(document, frame, r1    , c2, 2, 3, nullptr, &c2);
     }
     // clang-format on
 }
@@ -317,13 +313,14 @@ void createSheet_evaluateKata(QXlsx::Document& document, gXlsx::PeopleRecord& re
         createRow_evaluateKata(document, 3 + (i * 2), 2);
     }
 
-    auto N = record.athletes.count();
-    for (decltype(N) i{0}; i < N; ++i) {
+    auto N = (int)record.athletes.count();
+    for (decltype(N) i(0); i < N; ++i) {
         auto athlete = record.athletes.at(i).split(";", Qt::SkipEmptyParts);
         if (athlete.count() > 2) {
-            document.write(3 + (i * 2), __ 2, athlete.at(0) + "\n" + athlete.at(1));
-            document.write(3 + (i * 2), _ 10, athlete.at(2));
-            document.write(4 + (i * 2), _ 10, athlete.at(3));
+            // clang-format off
+            document.write(3 + (i * 2),  2, athlete.at(0) + "\n" + athlete.at(1));
+            document.write(3 + (i * 2), 10, athlete.at(2) + "\n" + athlete.at(3));
+            // clang-format on
         }
     }
 }
@@ -337,10 +334,11 @@ void createTitle_evaluateKumite(QXlsx::Document& document, int r1, int c1) {
     frame.setFontSize(9);
     frame.setFontBold(true);
 
-    int c2;
+    int c2 = 0;
+
     // clang-format off
-    merge_cells(document, frame, r1, c1    , 3, 5, 0, &c2);
-    merge_cells(document, frame, r1, c2 + 1, 3, 5, 0,   0);
+    merge_cells(document, frame, r1, c1    , 3, 5, nullptr,     &c2);
+    merge_cells(document, frame, r1, c2 + 1, 3, 5, nullptr, nullptr);
     // clang-format on
 
     r1 += 52;
@@ -439,8 +437,8 @@ void createSheet_evaluateKumite(QXlsx::Document& document, gXlsx::PeopleRecord& 
     createRow_evaluateKumite(document, 16, 20,  2, 30);
     // clang-format on
 
-    auto N = record.athletes.count();
-    for (decltype(N) i{0}; i < N; ++i) {
+    auto N = (int)record.athletes.count();
+    for (decltype(N) i(0); i < N; ++i) {
         auto athlete = record.athletes.at(i).split(";", Qt::SkipEmptyParts);
         if (athlete.count() > 1) {
             document.write(2 + (i * 4), 2, athlete.at(0) + ", " + athlete.at(1));
@@ -461,3 +459,7 @@ void gXlsx::createSheetEvaluate(QXlsx::Document& document, PeopleRecord& record,
 
     qDebug("[E200] wrong condition detected");
 }
+
+/* =============================================================================
+   End of file
+ */

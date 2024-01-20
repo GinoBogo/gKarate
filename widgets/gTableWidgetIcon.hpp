@@ -28,7 +28,7 @@ class gTableWidgetIcon : public gTableWidgetBase, public QLabel {
     QList<QPixmap>& images() {
         return m_images;
     }
-    QString index() const {
+    [[nodiscard]] QString index() const {
         return QString::number(m_index);
     }
     void setIndex(const QString& data);

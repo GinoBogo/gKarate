@@ -34,20 +34,20 @@ class gTableWidgetCBox : public gTableWidgetBase, public QComboBox {
     const QLineEdit& lineEdit() {
         return m_line_edit;
     }
-    QString index() const {
+    [[nodiscard]] QString index() const {
         return QString::number(currentIndex());
     }
     void setIndex(const QString& data) {
         setCurrentIndex(data.toInt());
     }
-    QString text() const {
+    [[nodiscard]] QString text() const {
         return currentText();
     }
     void setText(const QString& data) {
         setCurrentText(data);
     }
 
-    void wheelEvent(QWheelEvent* e) {
+    void wheelEvent(QWheelEvent* e) override {
         if (hasFocus()) {
             QComboBox::wheelEvent(e);
         }

@@ -18,8 +18,10 @@
 #include <qnamespace.h>
 #include <qstring.h>
 
-gTableWidgetIcon::gTableWidgetIcon(gTableWidgetRow* parent) : gTableWidgetBase(ICON, this) {
-    m_parent = parent;
+gTableWidgetIcon::gTableWidgetIcon(gTableWidgetRow* parent) :
+gTableWidgetBase(ICON, this),
+m_parent(parent),
+m_index(-1) {
 
     setAlignment(Qt::AlignCenter);
 }
@@ -32,3 +34,7 @@ void gTableWidgetIcon::setIndex(const QString& data) {
         m_index = index;
     }
 }
+
+/* =============================================================================
+   End of file
+ */

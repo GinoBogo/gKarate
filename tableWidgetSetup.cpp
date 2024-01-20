@@ -22,7 +22,7 @@
 #include <qpixmap.h>
 #include <qsize.h>
 
-const char* RANK_MAP[] = {
+const char* const RANK_MAP[] = {
     "BIANCA",           //  0
     "BIANCA-GIALLA",    //  1
     "GIALLA",           //  2
@@ -38,7 +38,7 @@ const char* RANK_MAP[] = {
     "NERA"              // 12
 };
 
-QStringList setup_menu_names = {
+const QStringList setup_menu_names = {
     "Aggiungi Atleta",   // Insert
     "Rimuovi Atleta",    // Remove
     "Elimina Elenco",    // Clear
@@ -91,7 +91,7 @@ void setupRow_Full(gTableWidgetRow* row_ptr) {
              QPixmap(":/res/images/beld_brown_black.png"),
              QPixmap(":/res/images/beld_black.png")};
 
-        auto N = items.at(4)->toCBox()->images().count();
+        auto N = (int)items.at(4)->toCBox()->images().count();
         items.at(4)->toCBox()->setIconSize(QSize(64, 24));
         items.at(4)->toCBox()->resize(N);
         items.at(4)->toCBox()->setupUi();
@@ -146,3 +146,7 @@ void setupRow_Mini(gTableWidgetRow* row_ptr) {
         }
     }
 }
+
+/* =============================================================================
+   End of file
+ */

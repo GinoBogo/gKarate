@@ -18,7 +18,8 @@
 #include <qstring.h>
 #include <qwidget.h>
 
-gFileDialog::gFileDialog(QWidget* parent, AcceptMode mode) : QFileDialog(parent) {
+gFileDialog::gFileDialog(QWidget* parent, AcceptMode mode) :
+QFileDialog(parent) {
 
     filters.append("Any files (*)");
 
@@ -64,7 +65,11 @@ bool gFileDialog::show(QString& directory, const QString& filename) {
     return false;
 }
 
-bool gFileDialog::isExtensionEmpty() {
+bool gFileDialog::isExtensionEmpty() const {
     const auto& info = QFileInfo(selected);
     return info.suffix().isEmpty();
 }
+
+/* =============================================================================
+   End of file
+ */

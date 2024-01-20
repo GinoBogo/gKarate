@@ -1,0 +1,29 @@
+Diagnostics:
+  ClangTidy:
+    Add: [
+        bugprone-*,
+        clang-analyzer-*,
+        concurrency-*,
+        cppcoreguidelines-*
+        misc-*,
+        modernize-*,
+        performance-*,
+        readability-*,
+      ]
+    Remove:
+      [
+        bugprone-easily-swappable-parameters,
+        cppcoreguidelines-avoid-magic-numbers,
+        cppcoreguidelines-owning-memory,
+        misc-no-recursion,
+        misc-non-private-member-variables-in-classes,
+        modernize-avoid-c-arrays,
+        modernize-use-trailing-return-type,
+        modernize-use-using,
+        readability-identifier-length,
+        readability-magic-numbers,
+        readability-redundant-access-specifiers,
+      ]
+
+CompileFlags:
+  Remove: [-mdfp=*, -mprocessor=*]

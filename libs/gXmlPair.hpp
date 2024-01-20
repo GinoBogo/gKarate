@@ -48,10 +48,10 @@ class gXmlPair : public QPair<QString, QString> {
     }
 
     static QString str2hex(const QString& data) {
-        return QString(data.toUtf8().toHex());
+        return {data.toUtf8().toHex()};
     }
     static QString hex2str(const QString& data) {
-        return QString(QByteArray::fromHex(data.toUtf8()));
+        return {QByteArray::fromHex(data.toUtf8())};
     }
 };
 

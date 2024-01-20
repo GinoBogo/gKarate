@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/res">
+        <file>icons/main.ico</file>
         <file>icons/calendar.png</file>
         <file>icons/menu_insert.png</file>
         <file>icons/menu_remove.png</file>

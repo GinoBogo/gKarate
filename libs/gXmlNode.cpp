@@ -14,8 +14,8 @@
 
 #include <qforeach.h>
 
-gXmlNode::gXmlNode(gXmlNode* parent) {
-    this->parent = parent;
+gXmlNode::gXmlNode(gXmlNode* parent) :
+parent(parent) {
 
     if (parent != nullptr) {
         parent->children.append(this);
@@ -37,3 +37,7 @@ void gXmlNode::clear() {
         }
     }
 }
+
+/* =============================================================================
+   End of file
+ */

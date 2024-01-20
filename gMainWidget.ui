@@ -24,6 +24,10 @@
   <property name="windowTitle">
    <string>gKarate</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="main.qrc">
+    <normaloff>:/res/icons/main.ico</normaloff>:/res/icons/main.ico</iconset>
+  </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
     <widget class="QTabWidget" name="tabWidget">
@@ -34,7 +38,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_1_match">
       <attribute name="title">
@@ -832,7 +836,7 @@
   <customwidget>
    <class>gTableWidget</class>
    <extends>QTableWidget</extends>
-   <header>widgets/gTableWidget.hpp</header>
+   <header location="global">gTableWidget.hpp</header>
    <slots>
     <slot>slotCustomContextMenu(QPoint)</slot>
    </slots>

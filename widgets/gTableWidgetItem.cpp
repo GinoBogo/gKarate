@@ -15,8 +15,13 @@
 #include "gTableWidgetBase.hpp"
 #include "gTableWidgetRow.hpp"
 
-gTableWidgetItem::gTableWidgetItem(gTableWidgetRow* parent) : gTableWidgetBase(ITEM, this) {
-    m_parent = parent;
+gTableWidgetItem::gTableWidgetItem(gTableWidgetRow* parent) :
+gTableWidgetBase(ITEM, this),
+m_parent(parent) {
 
     setText("...");
 }
+
+/* =============================================================================
+   End of file
+ */

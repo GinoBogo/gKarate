@@ -23,7 +23,7 @@ class gFileDialog : public QFileDialog {
 
     bool show(QString& directory, const QString& filename = "");
 
-    bool isExtensionEmpty();
+    [[nodiscard]] bool isExtensionEmpty() const;
 
   public:
     QStringList filters;

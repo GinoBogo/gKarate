@@ -14,11 +14,11 @@
 #define GMAINWIDGET_HPP
 
 #include "gDateDialog.hpp"
-#include "gFileDialog.hpp"
-#include "gTableWidget.hpp"
-#include "xlsxdocument.h"
+#include "libs/gFileDialog.hpp"
+#include "qxlsx/xlsxdocument.h"
+#include "widgets/gTableWidget.hpp"
 
-#include <QWidget>
+#include <qwidget.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -50,33 +50,37 @@ class gMainWidget : public QWidget {
     void slotButton_ExportKumite();
 
   private:
-    void    updateWindowTitle();
-    void    updateRowTargetDate();
-    QString getDocName() const;
-    QString getAppPath() const;
-    QString addAppPath(const QString& filename) const;
-    void    openConfig(const QString& filename);
-    void    saveConfig(const QString& filename);
+    void                         updateWindowTitle();
+    void                         updateRowTargetDate();
+    [[nodiscard]] QString        getDocName() const;
+    [[nodiscard]] static QString getAppPath();
+    [[nodiscard]] static QString addAppPath(const QString& filename);
+    void                         openConfig(const QString& filename);
+    void                         saveConfig(const QString& filename);
 
     void clearTab1_Match();
     void clearTab2_Kata();
     void clearTab3_Kumite();
 
-    void comboBox_ReferencePopulate(QComboBox* comboBox_people_dst, QWidget* tab_number_dst, const QString& filter);
+    void comboBox_ReferencePopulate(QComboBox*     comboBox_people_dst, //
+                                    QWidget*       tab_number_dst,
+                                    const QString& filter);
 
-    void comboBox_ReferenceChanged(gTableWidget* tableWidget_people_dst, const QString& reference, const QString& filter);
+    void comboBox_ReferenceChanged(gTableWidget*  tableWidget_people_dst, //
+                                   const QString& reference,
+                                   const QString& filter);
 
-    void tableWidget_ReorderPeople(gTableWidget* tableWidget_people_dst);
+    static void tableWidget_ReorderPeople(gTableWidget* tableWidget_people_dst);
 
-    void tableWidget_ExportRegister(gTableWidget*    tableWidget_people_src,
-                                    QXlsx::Document& document,
-                                    const QString&   title,
-                                    const QString&   practice);
+    static void tableWidget_ExportRegister(gTableWidget*    tableWidget_people_src,
+                                           QXlsx::Document& document,
+                                           const QString&   title,
+                                           const QString&   practice);
 
-    void tableWidget_ExportEvaluate(gTableWidget*    tableWidget_people_src,
-                                    QXlsx::Document& document,
-                                    const QString&   title,
-                                    const QString&   practice);
+    static void tableWidget_ExportEvaluate(gTableWidget*    tableWidget_people_src,
+                                           QXlsx::Document& document,
+                                           const QString&   title,
+                                           const QString&   practice);
 
   private:
     Ui::gMainWidget* ui;
@@ -86,8 +90,9 @@ class gMainWidget : public QWidget {
     gFileDialog* m_saveExport;
     gDateDialog* m_dateDialog;
 
-    QString m_document;
-    QString m_directory;
+    const QString m_untitled = "senza_nome";
+    QString       m_document;
+    QString       m_directory;
 };
 
 #endif // GMAINWIDGET_HPP

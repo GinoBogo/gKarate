@@ -26,19 +26,19 @@ class gDateDialog : public QDialog {
 
   public:
     explicit gDateDialog(QWidget* parent = nullptr);
-    ~gDateDialog();
+    ~gDateDialog() override;
 
-    void        setDate(const QDate& date);
-    const QDate getDate();
+    void                setDate(const QDate& date) const;
+    [[nodiscard]] QDate getDate() const;
 
-    static const QString date2str(const QDate& date);
-    static const QDate   str2date(const QString& str);
+    static QString date2str(const QDate& date);
+    static QDate   str2date(const QString& str);
 
   private slots:
     void slotButton_Cancel();
     void slotButton_Select();
 
-  private:
+  public:
     Ui::gDateDialog* ui;
 
     QDate m_date;

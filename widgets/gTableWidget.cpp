@@ -27,12 +27,12 @@
 #define CONNECT_MENU(index, slot) \
     connect(m_actions.at(index), &QAction::triggered, this, &gTableWidget::slot);
 
-gTableWidget::gTableWidget(QWidget* parent) : QTableWidget(parent) {
+gTableWidget::gTableWidget(QWidget* parent) :
+QTableWidget(parent),
+m_rows(new gTableWidgetRows(this)),
+m_menu(new QMenu(this)) {
+
     setContextMenuPolicy(Qt::CustomContextMenu);
-
-    m_rows = new gTableWidgetRows(this);
-
-    m_menu = new QMenu(this);
 
     QFont font = m_menu->font();
     font.setPointSize(12);
@@ -80,7 +80,7 @@ void gTableWidget::setupUi() {
     auto N = columnCount();
 
     m_header_names.clear();
-    for (decltype(N) i{0}; i < N; ++i) {
+    for (decltype(N) i(0); i < N; ++i) {
         m_header_names.append(horizontalHeaderItem(i)->text());
     }
 }
@@ -89,7 +89,7 @@ const QStringList& gTableWidget::headerSizes() {
     auto N = columnCount();
 
     m_header_sizes.clear();
-    for (decltype(N) i{0}; i < N; ++i) {
+    for (decltype(N) i(0); i < N; ++i) {
         m_header_sizes.append(QString::number(columnWidth(i)));
     }
 
@@ -100,9 +100,9 @@ bool gTableWidget::setHeaderSize(const QString& name, int size) {
     if (size > 0) {
         auto N = m_header_names.count();
 
-        for (decltype(N) i{0}; i < N; ++i) {
+        for (decltype(N) i(0); i < N; ++i) {
             if (name == m_header_names.at(i)) {
-                setColumnWidth(i, size);
+                setColumnWidth((int)i, size);
                 return true;
             }
         }
@@ -115,7 +115,7 @@ void gTableWidget::renameMenuNames(const QStringList& names) {
     auto N = names.count();
 
     if (N == m_actions.count()) {
-        for (decltype(N) i{0}; i < N; ++i) {
+        for (decltype(N) i(0); i < N; ++i) {
             m_actions[i]->setText(names.at(i));
         }
     }
@@ -128,7 +128,7 @@ void gTableWidget::slotCustomContextMenu(const QPoint& pos) {
     auto row_index = currentRow();
 
     const bool check_1 = row_index != -1;
-    const bool check_2 = m_rows->isClipboardEmpty() == false;
+    const bool check_2 = !m_rows->isClipboardEmpty();
     const bool check_3 = row_index > 0;
     const bool check_4 = row_index < (row_count - 1);
 
@@ -202,3 +202,7 @@ void gTableWidget::slotMenu_MoveDown() {
     auto row_index = currentRow();
     m_rows->moveDownRow(row_index);
 }
+
+/* =============================================================================
+   End of file
+ */

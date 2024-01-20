@@ -24,7 +24,7 @@ class gTableWidgetCell : public gTableWidgetBase, public QWidget {
   public:
     gTableWidgetCell(gTableWidgetRow* parent);
 
-    QString title() const {
+    [[nodiscard]] QString title() const {
         return windowTitle();
     }
     void setTitle(const QString& title) {

@@ -25,7 +25,7 @@ class gTableWidget : public QTableWidget {
 
   public:
     gTableWidget(QWidget* parent);
-    ~gTableWidget();
+    ~gTableWidget() override;
 
     void setupUi();
 

@@ -17,8 +17,8 @@
 
 #include <qcontainerfwd.h>
 
-gTableWidgetRow::gTableWidgetRow(gTableWidgetRows* parent, func_setupRow setupRow) {
-    m_parent = parent;
+gTableWidgetRow::gTableWidgetRow(gTableWidgetRows* parent, func_setupRow setupRow) :
+m_parent(parent) {
 
     if (setupRow != nullptr) {
         setupRow(this);
@@ -38,7 +38,7 @@ QStringList gTableWidgetRow::cellData() {
     QStringList cellData;
 
     auto N = this->count();
-    for (decltype(N) i{0}; i < N; ++i) {
+    for (decltype(N) i(0); i < N; ++i) {
         auto* _item = at(i);
 
         switch (_item->type()) {
@@ -74,7 +74,7 @@ QStringList gTableWidgetRow::cellData() {
 void gTableWidgetRow::setCellData(const QStringList& cellData) {
 
     auto N = this->count();
-    for (decltype(N) i{0}; i < N; ++i) {
+    for (decltype(N) i(0); i < N; ++i) {
         auto* _item = at(i);
 
         switch (_item->type()) {
@@ -104,3 +104,7 @@ void gTableWidgetRow::setCellData(const QStringList& cellData) {
         }
     }
 }
+
+/* =============================================================================
+   End of file
+ */
