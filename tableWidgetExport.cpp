@@ -126,7 +126,7 @@ void createTitle_registerCommon(QXlsx::Document& document, gXlsx::PeopleRecord& 
     document.write(r2, c1, "NUM.");
     merge_cells(document, header_3, r2, c1, 1, 2, nullptr, &c2);
 
-    document.write(r2, c2, "COGNOME E NOME");
+    document.write(r2, c2, "COGNOME, NOME");
     merge_cells(document, header_3, r2, c2, 1, 7, nullptr, &c2);
 
     document.write(r2, c2, "SOCIETÀ");
@@ -456,8 +456,6 @@ void gXlsx::createSheetEvaluate(QXlsx::Document& document, PeopleRecord& record,
         createSheet_evaluateKumite(document, record, sheet);
         return;
     }
-
-    qDebug("[E200] wrong condition detected");
 }
 
 /* =============================================================================
