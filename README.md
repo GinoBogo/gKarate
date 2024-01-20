@@ -1,4 +1,4 @@
-## A Qt application-based to manage Kata and Kumite competitions among Karate athletes.
+## A Qt-based application to manage Kata and Kumite competitions among Karate athletes.
 
 The "gKarate" code uses the "QXlsx" library to export athletes registration and evaluation sheets in Excel format.
 
