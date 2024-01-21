@@ -11,9 +11,9 @@
  */
 
 #include "gMainWidget.hpp"
-#include "qlocale.h"
 
 #include <QApplication>
+#include <QLocale>
 #include <QPixmap>
 #include <QSplashScreen>
 #include <QTimer>
