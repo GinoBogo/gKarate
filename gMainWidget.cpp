@@ -52,6 +52,8 @@ m_document(m_untitled) {
 
     ui->setupUi(this);
 
+    setupRankMap();
+
     ui->tabWidget->setStyleSheet("QTabBar::tab { width: 160px; }");
     ui->tabWidget->setCurrentIndex(0);
 

@@ -76,7 +76,7 @@ void gTableWidgetDate::slotDateChanged(QDate date) {
         D += date.daysInMonth();
     }
 
-    setToolTip(QString("%1Y %2M %3D").arg(Y).arg(M).arg(D));
+    setToolTip(QString(QObject::tr("%1Y %2M %3D")).arg(Y).arg(M).arg(D));
 }
 
 QString gTableWidgetDate::date2str(const QDate& date) {

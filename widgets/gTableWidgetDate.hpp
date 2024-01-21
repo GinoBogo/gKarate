@@ -14,6 +14,7 @@
 #define GTABLEWIDGETDATE_HPP
 
 #include "gTableWidgetBase.hpp"
+#include "qtmetamacros.h"
 
 #include <QDate>
 #include <QDateEdit>

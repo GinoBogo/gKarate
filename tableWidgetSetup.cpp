@@ -23,21 +23,25 @@
 #include <qsize.h>
 #include <qstring.h>
 
-const QStringList RANK_MAP = {
-    QObject::tr("WHITE"),         //  0
-    QObject::tr("WHITE-YELLOW"),  //  1
-    QObject::tr("YELLOW"),        //  2
-    QObject::tr("YELLOW-ORANGE"), //  3
-    QObject::tr("ORANGE"),        //  4
-    QObject::tr("ORANGE-GREEN"),  //  5
-    QObject::tr("GREEN"),         //  6
-    QObject::tr("GREEN-BLUE"),    //  7
-    QObject::tr("BLUE"),          //  8
-    QObject::tr("BLUE-BROWN"),    //  9
-    QObject::tr("BROWN"),         // 10
-    QObject::tr("BROWN-BLACK"),   // 11
-    QObject::tr("BLACK")          // 12
-};
+QStringList RANK_MAP;
+
+void setupRankMap() {
+    RANK_MAP = QStringList{
+        QObject::tr("WHITE"),         //  0
+        QObject::tr("WHITE-YELLOW"),  //  1
+        QObject::tr("YELLOW"),        //  2
+        QObject::tr("YELLOW-ORANGE"), //  3
+        QObject::tr("ORANGE"),        //  4
+        QObject::tr("ORANGE-GREEN"),  //  5
+        QObject::tr("GREEN"),         //  6
+        QObject::tr("GREEN-BLUE"),    //  7
+        QObject::tr("BLUE"),          //  8
+        QObject::tr("BLUE-BROWN"),    //  9
+        QObject::tr("BROWN"),         // 10
+        QObject::tr("BROWN-BLACK"),   // 11
+        QObject::tr("BLACK")          // 12
+    };
+}
 
 void setupRow_Full(gTableWidgetRow* row_ptr) {
     if (row_ptr != nullptr) {

@@ -17,7 +17,7 @@
 
 #include <qstringlist.h>
 
-extern const QStringList RANK_MAP;
+extern QStringList RANK_MAP;
 
 enum ROW_FULL_INDEX {
     FULL_SURNAME,   //
@@ -40,6 +40,7 @@ enum ROW_MINI_INDEX {
     MINI_STYLE,    //
 };
 
+void setupRankMap();
 void setupRow_Full(gTableWidgetRow* row_ptr);
 void setupRow_Mini(gTableWidgetRow* row_ptr);
 

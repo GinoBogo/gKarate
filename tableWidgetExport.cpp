@@ -46,7 +46,7 @@ void gXlsx::decodeTableWidget(gTableWidget* src_table, PeopleRecord& dst_record)
                 rank      += rem;
 
                 dst_record.category = row->at(MINI_CATEGORY)->toItem()->text();
-                dst_record.rank     = RANK_MAP[rank];
+                dst_record.rank     = RANK_MAP.at(rank);
             }
             // clang-format off
             const auto athlete = QString("%1;%2;%3;%4")
@@ -261,7 +261,7 @@ void createPodium_evaluateKata(QXlsx::Document& document, int r1, int c1) {
     }
 
     merge_cells(document, frame, r1, c1, 2, 9, &r1);
-    document.write(r1 - 2, c1, "PLAY-OFF");
+    document.write(r1 - 2, c1, QObject::tr("PLAY-OFF"));
 
     for (int i = 1; i <= 5; ++i) {
         merge_cells(document, lines, r1, c1, 2, 9, &r1);

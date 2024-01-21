@@ -11,6 +11,7 @@
  */
 
 #include "gMainWidget.hpp"
+#include "qlocale.h"
 
 #include <QApplication>
 #include <QPixmap>
@@ -18,6 +19,7 @@
 #include <QTimer>
 #include <QTranslator>
 
+#define TEST_LANG_IT false
 #define ENABLE_SPLASH_SCREEN
 
 int main(int argc, char* argv[]) {
@@ -25,11 +27,13 @@ int main(int argc, char* argv[]) {
 
     QApplication app(argc, argv);
 
+    QTranslator ts;
+
+#if (TEST_LANG_IT == false)
     QLocale locale;
-
-    if (locale.country() == QLocale::Italy) {
-        QTranslator ts;
-
+    if (locale.country() == QLocale::Italy)
+#endif
+    {
         if (ts.load(":/res/lang/lang_it.qm")) {
             // NOLINTNEXTLINE(*static-accessed*)
             app.installTranslator(&ts);
