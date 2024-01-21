@@ -12,6 +12,7 @@
 
 #include "tableWidgetExport.hpp"
 
+#include "qobject.h"
 #include "qxlsx/xlsxcellrange.h"
 #include "qxlsx/xlsxdocument.h"
 #include "qxlsx/xlsxformat.h"
@@ -59,6 +60,7 @@ void gXlsx::decodeTableWidget(gTableWidget* src_table, PeopleRecord& dst_record)
     }
 }
 
+// REVIEW the number of function arguments exceeds the limit of 4.
 void merge_cells(QXlsx::Document&     document, //
                  const QXlsx::Format& format,
                  int                  r1,
@@ -102,8 +104,8 @@ void createTitle_registerCommon(QXlsx::Document& document, gXlsx::PeopleRecord& 
     Format header_3(frame_center);
     header_3.setFontSize(11);
 
-    const auto& category = QString("CATEGORIA:  %1").arg(record.category);
-    const auto& rank     = QString("GRADO:  %1").arg(record.rank);
+    const auto& category = QString(QObject::tr("CATEGORY:  %1")).arg(record.category);
+    const auto& rank     = QString(QObject::tr("RANK:  %1")).arg(record.rank);
 
     int r2 = 0;
     int c2 = 0;
@@ -111,7 +113,7 @@ void createTitle_registerCommon(QXlsx::Document& document, gXlsx::PeopleRecord& 
     document.write(r1, c1, record.title);
     merge_cells(document, header_1, r1, c1, 3, 20, &r2, nullptr);
 
-    document.write(r2, c1, "VERBALE DI ISCRIZIONE");
+    document.write(r2, c1, QObject::tr("REGISTRATION REPORT"));
     merge_cells(document, header_1, r2, c1, 3, 20, &r2, nullptr);
 
     document.write(r2, c1, record.practice);
@@ -123,16 +125,16 @@ void createTitle_registerCommon(QXlsx::Document& document, gXlsx::PeopleRecord& 
     document.write(r2, c2, rank);
     merge_cells(document, header_2, r2, c2, 2, 10, &r2, nullptr);
 
-    document.write(r2, c1, "NUM.");
+    document.write(r2, c1, QObject::tr("NUM."));
     merge_cells(document, header_3, r2, c1, 1, 2, nullptr, &c2);
 
-    document.write(r2, c2, "COGNOME, NOME");
+    document.write(r2, c2, QObject::tr("SURNAME, NAME"));
     merge_cells(document, header_3, r2, c2, 1, 7, nullptr, &c2);
 
-    document.write(r2, c2, "SOCIETÀ");
+    document.write(r2, c2, QObject::tr("SOCIETY"));
     merge_cells(document, header_3, r2, c2, 1, 7, nullptr, &c2);
 
-    document.write(r2, c2, "STILE");
+    document.write(r2, c2, QObject::tr("STYLE"));
     merge_cells(document, header_3, r2, c2, 1, 4, nullptr, nullptr);
 }
 
@@ -200,31 +202,31 @@ void createTitle_evaluateKata(QXlsx::Document& document, int r1, int c1) {
     int c2 = 0;
 
     merge_cells(document, frame, r1, c1, 1, 8, nullptr, &c2);
-    document.write(r1, c2 - 8, "COGNOME, NOME");
+    document.write(r1, c2 - 8, QObject::tr("SURNAME, NAME"));
 
     merge_cells(document, frame, r1, c2, 1, 10, nullptr, &c2);
-    document.write(r1, c2 - 10, "SOCIETÀ, STILE");
+    document.write(r1, c2 - 10, QObject::tr("SOCIETY, STYLE"));
 
     merge_cells(document, frame, r1, c2, 1, 10, nullptr, &c2);
-    document.write(r1, c2 - 10, "1° KATA");
+    document.write(r1, c2 - 10, QObject::tr("1° KATA"));
 
     merge_cells(document, frame, r1, c2, 1, 3, nullptr, &c2);
-    document.write(r1, c2 - 3, "NOTE");
+    document.write(r1, c2 - 3, QObject::tr("NOTE"));
 
     merge_cells(document, frame, r1, c2, 1, 10, nullptr, &c2);
-    document.write(r1, c2 - 10, "2° KATA");
+    document.write(r1, c2 - 10, QObject::tr("2° KATA"));
 
     merge_cells(document, frame, r1, c2, 1, 3, nullptr, &c2);
-    document.write(r1, c2 - 3, "NOTE");
+    document.write(r1, c2 - 3, QObject::tr("NOTE"));
 
     merge_cells(document, frame, r1, c2, 1, 10, nullptr, &c2);
-    document.write(r1, c2 - 10, "3° KATA");
+    document.write(r1, c2 - 10, QObject::tr("3° KATA"));
 
     merge_cells(document, frame, r1, c2, 1, 3, nullptr, &c2);
-    document.write(r1, c2 - 3, "NOTE");
+    document.write(r1, c2 - 3, QObject::tr("NOTE"));
 
     merge_cells(document, frame, r1, c2, 1, 9, nullptr, &c2);
-    document.write(r1, c2 - 9, "CLASSIFICA FINALE");
+    document.write(r1, c2 - 9, QObject::tr("FINAL RANKING"));
 }
 
 void createPodium_evaluateKata(QXlsx::Document& document, int r1, int c1) {
@@ -243,7 +245,7 @@ void createPodium_evaluateKata(QXlsx::Document& document, int r1, int c1) {
     lines.setFontSize(9);
 
     merge_cells(document, frame, r1, c1, 2, 9, &r1);
-    document.write(r1 - 2, c1, "PODIO  . . . . . . . . . . . . .");
+    document.write(r1 - 2, c1, QObject::tr("PODIUM  . . . . . . . . . . . ."));
 
     for (int i = 1; i <= 4; ++i) {
         merge_cells(document, lines, r1, c1, 2, 9, &r1);
@@ -251,7 +253,7 @@ void createPodium_evaluateKata(QXlsx::Document& document, int r1, int c1) {
     }
 
     merge_cells(document, frame, r1, c1, 2, 9, &r1);
-    document.write(r1 - 2, c1, "PODIO  . . . . . . . . . . . . .");
+    document.write(r1 - 2, c1, QObject::tr("PODIUM  . . . . . . . . . . . ."));
 
     for (int i = 1; i <= 4; ++i) {
         merge_cells(document, lines, r1, c1, 2, 9, &r1);
@@ -259,7 +261,7 @@ void createPodium_evaluateKata(QXlsx::Document& document, int r1, int c1) {
     }
 
     merge_cells(document, frame, r1, c1, 2, 9, &r1);
-    document.write(r1 - 2, c1, "SPAREGGI");
+    document.write(r1 - 2, c1, "PLAY-OFF");
 
     for (int i = 1; i <= 5; ++i) {
         merge_cells(document, lines, r1, c1, 2, 9, &r1);
@@ -342,7 +344,7 @@ void createTitle_evaluateKumite(QXlsx::Document& document, int r1, int c1) {
     // clang-format on
 
     r1 += 52;
-    document.write(r1, c1, "3° CLASSIFICATI");
+    document.write(r1, c1, QObject::tr("3° CLASSIFIED"));
     merge_cells(document, frame, r1, c1, 3, 5, &r1);
 
     frame.setBorderStyle(Format::BorderThin);
@@ -362,7 +364,7 @@ void createPodium_evaluateKumite(QXlsx::Document& document, int r1, int c1) {
     for (int i = 0; i < 2; ++i) {
         frame.setBorderStyle(Format::BorderMedium);
         frame.setPatternBackgroundColor(color_kumite);
-        document.write(ri, c1, "SEMIFINALE");
+        document.write(ri, c1, QObject::tr("SEMI-FINAL"));
         merge_cells(document, frame, ri, c1, 3, 5, &ri);
 
         frame.setBorderStyle(Format::BorderThin);
@@ -373,7 +375,7 @@ void createPodium_evaluateKumite(QXlsx::Document& document, int r1, int c1) {
 
     frame.setBorderStyle(Format::BorderMedium);
     frame.setPatternBackgroundColor(color_kumite);
-    document.write(ri, c1, "FINALE");
+    document.write(ri, c1, QObject::tr("FINAL"));
     merge_cells(document, frame, ri, c1, 3, 5, &ri);
 
     frame.setBorderStyle(Format::BorderThin);
@@ -383,7 +385,7 @@ void createPodium_evaluateKumite(QXlsx::Document& document, int r1, int c1) {
 
     frame.setBorderStyle(Format::BorderMedium);
     frame.setPatternBackgroundColor(color_kumite);
-    document.write(ri, c1, "CLASSIFICA COPPA");
+    document.write(ri, c1, QObject::tr("CUP STANDINGS"));
     merge_cells(document, frame, ri, c1, 3, 5, &ri);
 
     frame.setHorizontalAlignment(Format::AlignLeft);
@@ -425,8 +427,8 @@ void createSheet_evaluateKumite(QXlsx::Document& document, gXlsx::PeopleRecord& 
     document.setColumnWidth(2, 96, col_scale);
 
     createTitle_evaluateKumite(document, 2, 20);
-    document.write(2, 20, "CATEGORIA: " + record.category);
-    document.write(2, 26, "GRADO: " + record.rank);
+    document.write(2, 20, QObject::tr("CATEGORY: ") + record.category);
+    document.write(2, 26, QObject::tr("RANK: ") + record.rank);
 
     createPodium_evaluateKumite(document, 10, 26);
 

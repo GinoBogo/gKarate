@@ -136,6 +136,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         gDateDialog.cpp
         gDateDialog.hpp
         gDateDialog.ui
+        lang.qrc
         main.qrc
         main.rc
         tableWidgetExport.cpp

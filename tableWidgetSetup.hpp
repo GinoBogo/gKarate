@@ -15,11 +15,9 @@
 
 #include "widgets/gTableWidgetRow.hpp"
 
-extern "C" {
-    extern const char* const RANK_MAP[];
-}
+#include <qstringlist.h>
 
-extern const QStringList setup_menu_names;
+extern const QStringList RANK_MAP;
 
 enum ROW_FULL_INDEX {
     FULL_SURNAME,   //

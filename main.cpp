@@ -16,6 +16,7 @@
 #include <QPixmap>
 #include <QSplashScreen>
 #include <QTimer>
+#include <QTranslator>
 
 #define ENABLE_SPLASH_SCREEN
 
@@ -23,6 +24,17 @@ int main(int argc, char* argv[]) {
     QApplication::setStyle("fusion");
 
     QApplication app(argc, argv);
+
+    QLocale locale;
+
+    if (locale.country() == QLocale::Italy) {
+        QTranslator ts;
+
+        if (ts.load(":/res/lang/lang_it.qm")) {
+            // NOLINTNEXTLINE(*static-accessed*)
+            app.installTranslator(&ts);
+        }
+    }
 
     gMainWidget wnd;
 

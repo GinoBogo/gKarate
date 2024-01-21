@@ -143,4 +143,7 @@ SOURCES += main.cpp \
            widgets/gTableWidgetRow.cpp \
            widgets/gTableWidgetRows.cpp
 
-RESOURCES += main.qrc
+RESOURCES += main.qrc \
+    lang.qrc
+
+TRANSLATIONS += lang/lang_it.ts

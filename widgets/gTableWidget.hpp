@@ -36,8 +36,6 @@ class gTableWidget : public QTableWidget {
 
     bool setHeaderSize(const QString& name, int size);
 
-    void renameMenuNames(const QStringList& names);
-
     gTableWidgetRows* rows() {
         return m_rows;
     }
@@ -77,19 +75,19 @@ class gTableWidget : public QTableWidget {
         MOVE_DOWN
     };
 
-    const QStringList m_menu_names = //
-        {"Insert",                   //
-         "Remove",                   //
-         "Clear",                    //
-         "---",                      //
-         "Copy",                     //
-         "Cut",                      //
-         "Paste",                    //
-         "---",                      //
-         "Move Up",                  //
-         "Move Down"};               //
+    QStringList m_menu_names = //
+        {tr("Insert"),         //
+         tr("Remove"),         //
+         tr("Clear"),          //
+         tr("---"),            //
+         tr("Copy"),           //
+         tr("Cut"),            //
+         tr("Paste"),          //
+         tr("---"),            //
+         tr("Move Up"),        //
+         tr("Move Down")};     //
 
-    const QStringList m_menu_icons =        //
+    QStringList m_menu_icons =              //
         {":/res/icons/menu_insert.png",     //
          ":/res/icons/menu_remove.png",     //
          ":/res/icons/menu_clear.png",      //

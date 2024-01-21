@@ -40,23 +40,23 @@
      <property name="currentIndex">
       <number>0</number>
      </property>
-     <widget class="QWidget" name="tab_1_match">
+     <widget class="QWidget" name="tab_1_event">
       <attribute name="title">
-       <string>Foglio Gara</string>
+       <string>Event Sheet</string>
       </attribute>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_1">
          <item>
-          <widget class="QGroupBox" name="groupBox_match_info">
+          <widget class="QGroupBox" name="groupBox_EventSetup">
            <property name="title">
-            <string>Dati Gara</string>
+            <string>Event Setup</string>
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout_3">
             <item>
-             <layout class="QGridLayout" name="gridLayout">
+             <layout class="QGridLayout" name="gridLayout_1">
               <item row="0" column="5">
-               <widget class="QPushButton" name="pushButton_MakeKata">
+               <widget class="QPushButton" name="pushButton_CreateKata">
                 <property name="minimumSize">
                  <size>
                   <width>140</width>
@@ -73,7 +73,7 @@
                  <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="text">
-                 <string>Crea Kata</string>
+                 <string>Create Kata</string>
                 </property>
                 <property name="iconSize">
                  <size>
@@ -101,7 +101,7 @@
                  <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="text">
-                 <string>Salva Gara</string>
+                 <string>Save File</string>
                 </property>
                 <property name="iconSize">
                  <size>
@@ -112,7 +112,7 @@
                </widget>
               </item>
               <item row="0" column="0">
-               <widget class="QLabel" name="label_match_name">
+               <widget class="QLabel" name="label_EventName">
                 <property name="palette">
                  <palette>
                   <active>
@@ -141,7 +141,7 @@
                  </palette>
                 </property>
                 <property name="text">
-                 <string>Nome della Gara</string>
+                 <string>Event Name</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -166,7 +166,7 @@
                  <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="text">
-                 <string>Nuova Gara</string>
+                 <string>New File</string>
                 </property>
                 <property name="iconSize">
                  <size>
@@ -177,7 +177,7 @@
                </widget>
               </item>
               <item row="1" column="0">
-               <widget class="QLabel" name="label_match_site">
+               <widget class="QLabel" name="label_EventSite">
                 <property name="palette">
                  <palette>
                   <active>
@@ -206,7 +206,7 @@
                  </palette>
                 </property>
                 <property name="text">
-                 <string>Luogo della Gara</string>
+                 <string>Event Site</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -214,7 +214,7 @@
                </widget>
               </item>
               <item row="2" column="0">
-               <widget class="QLabel" name="label_match_date">
+               <widget class="QLabel" name="label_EventDate">
                 <property name="palette">
                  <palette>
                   <active>
@@ -243,7 +243,7 @@
                  </palette>
                 </property>
                 <property name="text">
-                 <string>Data della Gara</string>
+                 <string>Event Date</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -251,7 +251,7 @@
                </widget>
               </item>
               <item row="2" column="1">
-               <widget class="QLineEdit" name="lineEdit_match_date">
+               <widget class="QLineEdit" name="lineEdit_EventDate">
                 <property name="minimumSize">
                  <size>
                   <width>300</width>
@@ -326,7 +326,7 @@
                  <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="text">
-                 <string>Apri Gara</string>
+                 <string>Open File</string>
                 </property>
                 <property name="iconSize">
                  <size>
@@ -337,7 +337,7 @@
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="QLineEdit" name="lineEdit_match_name">
+               <widget class="QLineEdit" name="lineEdit_EventName">
                 <property name="minimumSize">
                  <size>
                   <width>300</width>
@@ -347,7 +347,7 @@
                </widget>
               </item>
               <item row="1" column="1">
-               <widget class="QLineEdit" name="lineEdit_match_site">
+               <widget class="QLineEdit" name="lineEdit_EventSite">
                 <property name="minimumSize">
                  <size>
                   <width>300</width>
@@ -357,7 +357,7 @@
                </widget>
               </item>
               <item row="1" column="5">
-               <widget class="QPushButton" name="pushButton_MakeKumite">
+               <widget class="QPushButton" name="pushButton_CreateKumite">
                 <property name="minimumSize">
                  <size>
                   <width>140</width>
@@ -374,7 +374,7 @@
                  <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="text">
-                 <string>Crea Kumite</string>
+                 <string>Create Kumite</string>
                 </property>
                 <property name="iconSize">
                  <size>
@@ -390,13 +390,13 @@
           </widget>
          </item>
          <item>
-          <widget class="QGroupBox" name="groupBox_people_info">
+          <widget class="QGroupBox" name="groupBox_AthletesList">
            <property name="title">
-            <string>Elenco Atleti</string>
+            <string>Athletes List</string>
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout_4">
             <item>
-             <widget class="gTableWidget" name="tableWidget_people">
+             <widget class="gTableWidget" name="tableWidget_AthletesList">
               <property name="iconSize">
                <size>
                 <width>32</width>
@@ -426,47 +426,47 @@
               </attribute>
               <column>
                <property name="text">
-                <string>Cognome</string>
+                <string>Surname</string>
                </property>
               </column>
               <column>
                <property name="text">
-                <string>Nome</string>
+                <string>Name</string>
                </property>
               </column>
               <column>
                <property name="text">
-                <string>Data di Nascita</string>
+                <string>Birthday</string>
                </property>
               </column>
               <column>
                <property name="text">
-                <string>Categoria</string>
+                <string>Category</string>
                </property>
               </column>
               <column>
                <property name="text">
-                <string>Grado</string>
+                <string>Rank</string>
                </property>
               </column>
               <column>
                <property name="text">
-                <string>Pratica</string>
+                <string>Practice</string>
                </property>
               </column>
               <column>
                <property name="text">
-                <string>Stile</string>
+                <string>Style</string>
                </property>
               </column>
               <column>
                <property name="text">
-                <string>Società</string>
+                <string>Society</string>
                </property>
               </column>
               <column>
                <property name="text">
-                <string>Rif.</string>
+                <string>Ref.</string>
                </property>
               </column>
              </widget>
@@ -480,13 +480,13 @@
      </widget>
      <widget class="QWidget" name="tab_2_kata">
       <attribute name="title">
-       <string>Foglio Kata</string>
+       <string>Kata Sheet</string>
       </attribute>
       <layout class="QHBoxLayout" name="horizontalLayout_5">
        <item>
-        <widget class="QGroupBox" name="groupBox_people_kata">
+        <widget class="QGroupBox" name="groupBox_AthletesKata">
          <property name="title">
-          <string>Elenco Atleti Kata</string>
+          <string>Kata Athletes List</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
@@ -509,7 +509,7 @@
                <cursorShape>PointingHandCursor</cursorShape>
               </property>
               <property name="text">
-               <string>Riordina</string>
+               <string>Reorder</string>
               </property>
               <property name="iconSize">
                <size>
@@ -553,7 +553,7 @@
                <cursorShape>PointingHandCursor</cursorShape>
               </property>
               <property name="text">
-               <string>Esporta</string>
+               <string>Export</string>
               </property>
               <property name="iconSize">
                <size>
@@ -593,14 +593,14 @@
                </palette>
               </property>
               <property name="text">
-               <string>Riferimento (Foglio Gara)</string>
+               <string>Reference (Event Sheet)</string>
               </property>
              </widget>
             </item>
            </layout>
           </item>
           <item>
-           <widget class="gTableWidget" name="tableWidget_peopleKata">
+           <widget class="gTableWidget" name="tableWidget_AthletesKata">
             <attribute name="horizontalHeaderMinimumSectionSize">
              <number>48</number>
             </attribute>
@@ -618,32 +618,32 @@
             </attribute>
             <column>
              <property name="text">
-              <string>Cognome</string>
+              <string>Surname</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>Nome</string>
+              <string>Name</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>Categoria</string>
+              <string>Category</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>Grado</string>
+              <string>Rank</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>Società</string>
+              <string>Society</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>Stile</string>
+              <string>Style</string>
              </property>
             </column>
            </widget>
@@ -655,13 +655,13 @@
      </widget>
      <widget class="QWidget" name="tab_3_kumite">
       <attribute name="title">
-       <string>Foglio Kumite</string>
+       <string>Kumite Sheet</string>
       </attribute>
       <layout class="QHBoxLayout" name="horizontalLayout_6">
        <item>
-        <widget class="QGroupBox" name="groupBox_people_kumite">
+        <widget class="QGroupBox" name="groupBox_AthletesKumite">
          <property name="title">
-          <string>Elenco Atleti Kumite</string>
+          <string>Kumite Athletes List</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
@@ -696,7 +696,7 @@
                </palette>
               </property>
               <property name="text">
-               <string>Riferimento (Foglio Gara)</string>
+               <string>Reference (Event Sheet)</string>
               </property>
              </widget>
             </item>
@@ -718,7 +718,7 @@
                <cursorShape>PointingHandCursor</cursorShape>
               </property>
               <property name="text">
-               <string>Riordina</string>
+               <string>Reorder</string>
               </property>
               <property name="iconSize">
                <size>
@@ -762,7 +762,7 @@
                <cursorShape>PointingHandCursor</cursorShape>
               </property>
               <property name="text">
-               <string>Esporta</string>
+               <string>Export</string>
               </property>
               <property name="iconSize">
                <size>
@@ -775,7 +775,7 @@
            </layout>
           </item>
           <item>
-           <widget class="gTableWidget" name="tableWidget_peopleKumite">
+           <widget class="gTableWidget" name="tableWidget_AthletesKumite">
             <attribute name="horizontalHeaderMinimumSectionSize">
              <number>48</number>
             </attribute>
@@ -793,32 +793,32 @@
             </attribute>
             <column>
              <property name="text">
-              <string>Cognome</string>
+              <string>Surname</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>Nome</string>
+              <string>Name</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>Categoria</string>
+              <string>Category</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>Grado</string>
+              <string>Rank</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>Società</string>
+              <string>Society</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>Stile</string>
+              <string>Style</string>
              </property>
             </column>
            </widget>
@@ -844,20 +844,20 @@
  </customwidgets>
  <tabstops>
   <tabstop>tabWidget</tabstop>
-  <tabstop>lineEdit_match_name</tabstop>
-  <tabstop>lineEdit_match_site</tabstop>
-  <tabstop>lineEdit_match_date</tabstop>
+  <tabstop>lineEdit_EventName</tabstop>
+  <tabstop>lineEdit_EventSite</tabstop>
+  <tabstop>lineEdit_EventDate</tabstop>
   <tabstop>pushButton_MatchDate</tabstop>
   <tabstop>pushButton_FileNew</tabstop>
   <tabstop>pushButton_FileOpen</tabstop>
   <tabstop>pushButton_FileSave</tabstop>
-  <tabstop>pushButton_MakeKata</tabstop>
-  <tabstop>pushButton_MakeKumite</tabstop>
-  <tabstop>tableWidget_people</tabstop>
+  <tabstop>pushButton_CreateKata</tabstop>
+  <tabstop>pushButton_CreateKumite</tabstop>
+  <tabstop>tableWidget_AthletesList</tabstop>
   <tabstop>comboBox_ReferenceKata</tabstop>
   <tabstop>pushButton_ExportKata</tabstop>
   <tabstop>pushButton_ReorderKata</tabstop>
-  <tabstop>tableWidget_peopleKata</tabstop>
+  <tabstop>tableWidget_AthletesKata</tabstop>
  </tabstops>
  <resources>
   <include location="main.qrc"/>
@@ -928,9 +928,9 @@
    </hints>
   </connection>
   <connection>
-   <sender>tableWidget_people</sender>
+   <sender>tableWidget_AthletesList</sender>
    <signal>customContextMenuRequested(QPoint)</signal>
-   <receiver>tableWidget_people</receiver>
+   <receiver>tableWidget_AthletesList</receiver>
    <slot>slotCustomContextMenu(QPoint)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -944,9 +944,9 @@
    </hints>
   </connection>
   <connection>
-   <sender>tableWidget_peopleKata</sender>
+   <sender>tableWidget_AthletesKata</sender>
    <signal>customContextMenuRequested(QPoint)</signal>
-   <receiver>tableWidget_peopleKata</receiver>
+   <receiver>tableWidget_AthletesKata</receiver>
    <slot>slotCustomContextMenu(QPoint)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -960,10 +960,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton_MakeKata</sender>
+   <sender>pushButton_CreateKata</sender>
    <signal>clicked()</signal>
    <receiver>gMainWidget</receiver>
-   <slot>slotButton_MakeKata()</slot>
+   <slot>slotButton_CreateKata()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>795</x>
@@ -976,10 +976,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton_MakeKumite</sender>
+   <sender>pushButton_CreateKumite</sender>
    <signal>clicked()</signal>
    <receiver>gMainWidget</receiver>
-   <slot>slotButton_MakeKumite()</slot>
+   <slot>slotButton_CreateKumite()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>795</x>
@@ -1024,9 +1024,9 @@
    </hints>
   </connection>
   <connection>
-   <sender>tableWidget_peopleKumite</sender>
+   <sender>tableWidget_AthletesKumite</sender>
    <signal>customContextMenuRequested(QPoint)</signal>
-   <receiver>tableWidget_peopleKumite</receiver>
+   <receiver>tableWidget_AthletesKumite</receiver>
    <slot>slotCustomContextMenu(QPoint)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -1108,8 +1108,8 @@
   <slot>slotButton_FileNew()</slot>
   <slot>slotButton_FileOpen()</slot>
   <slot>slotButton_FileSave()</slot>
-  <slot>slotButton_MakeKata()</slot>
-  <slot>slotButton_MakeKumite()</slot>
+  <slot>slotButton_CreateKata()</slot>
+  <slot>slotButton_CreateKumite()</slot>
   <slot>slotButton_MatchDate()</slot>
   <slot>slotComboBox_ReferenceKata(QString)</slot>
   <slot>slotComboBox_ReferenceKumite(QString)</slot>

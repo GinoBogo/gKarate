@@ -111,16 +111,6 @@ bool gTableWidget::setHeaderSize(const QString& name, int size) {
     return false;
 }
 
-void gTableWidget::renameMenuNames(const QStringList& names) {
-    auto N = names.count();
-
-    if (N == m_actions.count()) {
-        for (decltype(N) i(0); i < N; ++i) {
-            m_actions[i]->setText(names.at(i));
-        }
-    }
-}
-
 void gTableWidget::slotCustomContextMenu(const QPoint& pos) {
     showActions(false);
 

@@ -55,19 +55,16 @@ m_document(m_untitled) {
     ui->tabWidget->setStyleSheet("QTabBar::tab { width: 160px; }");
     ui->tabWidget->setCurrentIndex(0);
 
-    ui->tableWidget_people->setupUi();
-    ui->tableWidget_people->renameMenuNames(setup_menu_names);
-    ui->tableWidget_people->rows()->setupRow(setupRow_Full);
+    ui->tableWidget_AthletesList->setupUi();
+    ui->tableWidget_AthletesList->rows()->setupRow(setupRow_Full);
 
-    ui->tableWidget_peopleKata->setupUi();
-    ui->tableWidget_peopleKata->renameMenuNames(setup_menu_names);
-    ui->tableWidget_peopleKata->rows()->setupRow(setupRow_Mini);
-    ui->tableWidget_peopleKata->setContextMenuPolicy(Qt::NoContextMenu);
+    ui->tableWidget_AthletesKata->setupUi();
+    ui->tableWidget_AthletesKata->rows()->setupRow(setupRow_Mini);
+    ui->tableWidget_AthletesKata->setContextMenuPolicy(Qt::NoContextMenu);
 
-    ui->tableWidget_peopleKumite->setupUi();
-    ui->tableWidget_peopleKumite->renameMenuNames(setup_menu_names);
-    ui->tableWidget_peopleKumite->rows()->setupRow(setupRow_Mini);
-    ui->tableWidget_peopleKumite->setContextMenuPolicy(Qt::NoContextMenu);
+    ui->tableWidget_AthletesKumite->setupUi();
+    ui->tableWidget_AthletesKumite->rows()->setupRow(setupRow_Mini);
+    ui->tableWidget_AthletesKumite->setContextMenuPolicy(Qt::NoContextMenu);
 
     m_directory = getAppPath();
     openConfig(addAppPath("gKarate.cfg"));
@@ -101,8 +98,8 @@ void gMainWidget::updateWindowTitle() {
 }
 
 void gMainWidget::updateRowTargetDate() {
-    const auto& date = ui->lineEdit_match_date->text();
-    const auto* rows = ui->tableWidget_people->rows();
+    const auto& date = ui->lineEdit_EventDate->text();
+    const auto* rows = ui->tableWidget_AthletesList->rows();
 
     auto N = rows->count();
     for (decltype(N) i(0); i < N; ++i) {
@@ -136,8 +133,8 @@ void gMainWidget::openConfig(const QString& filename) {
 
     if (xmlFile.open(filename)) {
         gXmlNode* node_0 = xmlFile.getRoot();
-        gXmlNode* node_1 = xmlFile.findNode(node_0, "main_widget");
-        gXmlNode* node_2 = xmlFile.findNode(node_1, "tab_widget");
+        gXmlNode* node_1 = xmlFile.findNode(node_0, "gMainWidget");
+        gXmlNode* node_2 = xmlFile.findNode(node_1, "tabWidget");
 
         { // SEGMENT "geometry"
             gXmlNode* node_A = xmlFile.findNode(node_1, "geometry");
@@ -157,41 +154,41 @@ void gMainWidget::openConfig(const QString& filename) {
             }
         }
 
-        { // SEGMENT "tab_widget_people"
-            gXmlNode* node = xmlFile.findNode(node_2, "tab_widget_people");
+        { // SEGMENT "tableWidget_AthletesList"
+            gXmlNode* node = xmlFile.findNode(node_2, "tableWidget_AthletesList");
 
             if (node != nullptr) {
                 foreach (gXmlNode* child, node->children) {
                     auto name = gXmlFile::getAttribute(child, "name");
                     auto size = gXmlFile::getAttribute(child, "size").toInt();
 
-                    (void)ui->tableWidget_people->setHeaderSize(name, size);
+                    (void)ui->tableWidget_AthletesList->setHeaderSize(name, size);
                 }
             }
         }
 
-        { // SEGMENT "tab_widget_people_kata"
-            gXmlNode* node = xmlFile.findNode(node_2, "tab_widget_people_kata");
+        { // SEGMENT "tableWidget_AthletesKata"
+            gXmlNode* node = xmlFile.findNode(node_2, "tableWidget_AthletesKata");
 
             if (node != nullptr) {
                 foreach (gXmlNode* child, node->children) {
                     auto name = gXmlFile::getAttribute(child, "name");
                     auto size = gXmlFile::getAttribute(child, "size").toInt();
 
-                    (void)ui->tableWidget_peopleKata->setHeaderSize(name, size);
+                    (void)ui->tableWidget_AthletesKata->setHeaderSize(name, size);
                 }
             }
         }
 
-        { // SEGMENT "tab_widget_people_kumite"
-            gXmlNode* node = xmlFile.findNode(node_2, "tab_widget_people_kumite");
+        { // SEGMENT "tableWidget_AthletesKumite"
+            gXmlNode* node = xmlFile.findNode(node_2, "tableWidget_AthletesKumite");
 
             if (node != nullptr) {
                 foreach (gXmlNode* child, node->children) {
                     auto name = gXmlFile::getAttribute(child, "name");
                     auto size = gXmlFile::getAttribute(child, "size").toInt();
 
-                    (void)ui->tableWidget_peopleKumite->setHeaderSize(name, size);
+                    (void)ui->tableWidget_AthletesKumite->setHeaderSize(name, size);
                 }
             }
         }
@@ -204,8 +201,8 @@ void gMainWidget::saveConfig(const QString& filename) {
     xmlFile.setRootName("gKarate");
 
     gXmlNode* node_0 = xmlFile.getRoot();
-    gXmlNode* node_1 = xmlFile.insertNode(node_0, "main_widget");
-    gXmlNode* node_2 = xmlFile.insertNode(node_1, "tab_widget");
+    gXmlNode* node_1 = xmlFile.insertNode(node_0, "gMainWidget");
+    gXmlNode* node_2 = xmlFile.insertNode(node_1, "tabWidget");
 
     { // SEGMENT "geometry"
         gXmlNode* node_A = xmlFile.insertNode(node_1, "geometry");
@@ -221,27 +218,11 @@ void gMainWidget::saveConfig(const QString& filename) {
         node_A->attributes.append(pair);
     }
 
-    { // SEGMENT "tab_widget_people"
-        gXmlNode* node = xmlFile.insertNode(node_2, "tab_widget_people");
+    { // SEGMENT "tableWidget_AthletesList"
+        gXmlNode* node = xmlFile.insertNode(node_2, "tableWidget_AthletesList");
 
-        const auto& headerNames = ui->tableWidget_people->headerNames();
-        const auto& headerSizes = ui->tableWidget_people->headerSizes();
-
-        auto N = headerNames.count();
-        for (decltype(N) i(0); i < N; ++i) {
-            const auto& name = QString("header_%1").arg(i, 2, 10, QChar('0'));
-
-            auto* node_i = xmlFile.insertNode(node, name);
-            node_i->attributes.append(gXmlPair("name", headerNames.at(i)));
-            node_i->attributes.append(gXmlPair("size", headerSizes.at(i)));
-        }
-    }
-
-    { // SEGMENT "tab_widget_people_kata"
-        gXmlNode* node = xmlFile.insertNode(node_2, "tab_widget_people_kata");
-
-        const auto& headerNames = ui->tableWidget_peopleKata->headerNames();
-        const auto& headerSizes = ui->tableWidget_peopleKata->headerSizes();
+        const auto& headerNames = ui->tableWidget_AthletesList->headerNames();
+        const auto& headerSizes = ui->tableWidget_AthletesList->headerSizes();
 
         auto N = headerNames.count();
         for (decltype(N) i(0); i < N; ++i) {
@@ -253,11 +234,27 @@ void gMainWidget::saveConfig(const QString& filename) {
         }
     }
 
-    { // SEGMENT "tab_widget_people_kumite"
-        gXmlNode* node = xmlFile.insertNode(node_2, "tab_widget_people_kumite");
+    { // SEGMENT "tableWidget_AthletesKata"
+        gXmlNode* node = xmlFile.insertNode(node_2, "tableWidget_AthletesKata");
 
-        const auto& headerNames = ui->tableWidget_peopleKumite->headerNames();
-        const auto& headerSizes = ui->tableWidget_peopleKumite->headerSizes();
+        const auto& headerNames = ui->tableWidget_AthletesKata->headerNames();
+        const auto& headerSizes = ui->tableWidget_AthletesKata->headerSizes();
+
+        auto N = headerNames.count();
+        for (decltype(N) i(0); i < N; ++i) {
+            const auto& name = QString("header_%1").arg(i, 2, 10, QChar('0'));
+
+            auto* node_i = xmlFile.insertNode(node, name);
+            node_i->attributes.append(gXmlPair("name", headerNames.at(i)));
+            node_i->attributes.append(gXmlPair("size", headerSizes.at(i)));
+        }
+    }
+
+    { // SEGMENT "tableWidget_AthletesKumite"
+        gXmlNode* node = xmlFile.insertNode(node_2, "tableWidget_AthletesKumite");
+
+        const auto& headerNames = ui->tableWidget_AthletesKumite->headerNames();
+        const auto& headerSizes = ui->tableWidget_AthletesKumite->headerSizes();
 
         auto N = headerNames.count();
         for (decltype(N) i(0); i < N; ++i) {
@@ -273,26 +270,26 @@ void gMainWidget::saveConfig(const QString& filename) {
 }
 
 void gMainWidget::clearTab1_Match() {
-    ui->lineEdit_match_name->setText("");
-    ui->lineEdit_match_site->setText("");
-    ui->lineEdit_match_date->setText("");
+    ui->lineEdit_EventName->setText("");
+    ui->lineEdit_EventSite->setText("");
+    ui->lineEdit_EventDate->setText("");
 
-    ui->tableWidget_people->rows()->clearAll();
+    ui->tableWidget_AthletesList->rows()->clearAll();
 }
 
 void gMainWidget::clearTab2_Kata() {
     ui->comboBox_ReferenceKata->clear();
-    ui->tableWidget_peopleKata->rows()->clearAll();
+    ui->tableWidget_AthletesKata->rows()->clearAll();
 }
 
 void gMainWidget::clearTab3_Kumite() {
     ui->comboBox_ReferenceKumite->clear();
-    ui->tableWidget_peopleKumite->rows()->clearAll();
+    ui->tableWidget_AthletesKumite->rows()->clearAll();
 }
 
 void gMainWidget::slotButton_MatchDate() {
     auto date = QDate::currentDate();
-    auto text = ui->lineEdit_match_date->text();
+    auto text = ui->lineEdit_EventDate->text();
 
     if (!text.isEmpty()) {
         date = gDateDialog::str2date(text);
@@ -303,7 +300,7 @@ void gMainWidget::slotButton_MatchDate() {
     if (m_dateDialog->exec() == QDialog::Accepted) {
         date = m_dateDialog->getDate();
         text = gDateDialog::date2str(date);
-        ui->lineEdit_match_date->setText(text);
+        ui->lineEdit_EventDate->setText(text);
 
         updateRowTargetDate();
     }
@@ -319,7 +316,7 @@ void gMainWidget::slotButton_FileNew() {
 }
 
 void gMainWidget::slotButton_FileOpen() {
-    ui->tableWidget_people->setSortingEnabled(false);
+    ui->tableWidget_AthletesList->setSortingEnabled(false);
 
     if (m_openDialog->show(m_directory)) {
         gXmlFile xmlFile;
@@ -336,27 +333,27 @@ void gMainWidget::slotButton_FileOpen() {
 
             gXmlNode* node_0 = nullptr;
 
-            { // SEGMENT "group_match"
-                gXmlNode* node_1 = xmlFile.findNode(node_0, "group_match");
-                gXmlNode* node_2 = xmlFile.findNode(node_1, "match_name");
-                gXmlNode* node_3 = xmlFile.findNode(node_1, "match_site");
-                gXmlNode* node_4 = xmlFile.findNode(node_1, "match_date");
+            { // SEGMENT "group_event"
+                gXmlNode* node_1 = xmlFile.findNode(node_0, "group_event");
+                gXmlNode* node_2 = xmlFile.findNode(node_1, "event_name");
+                gXmlNode* node_3 = xmlFile.findNode(node_1, "event_site");
+                gXmlNode* node_4 = xmlFile.findNode(node_1, "event_date");
 
                 if (node_2 != nullptr) {
-                    ui->lineEdit_match_name->setText(node_2->text);
+                    ui->lineEdit_EventName->setText(node_2->text);
                 }
                 if (node_3 != nullptr) {
-                    ui->lineEdit_match_site->setText(node_3->text);
+                    ui->lineEdit_EventSite->setText(node_3->text);
                 }
                 if (node_4 != nullptr) {
-                    ui->lineEdit_match_date->setText(node_4->text);
+                    ui->lineEdit_EventDate->setText(node_4->text);
                 }
             }
 
-            { // SEGMENT "group_people"
-                gXmlNode* node_1 = xmlFile.findNode(node_0, "group_people");
+            { // SEGMENT "group_athlete"
+                gXmlNode* node_1 = xmlFile.findNode(node_0, "group_athlete");
 
-                auto* rows = ui->tableWidget_people->rows();
+                auto* rows = ui->tableWidget_AthletesList->rows();
 
                 auto nodes = xmlFile.findNodes(node_1, "athlete");
 
@@ -381,7 +378,7 @@ void gMainWidget::slotButton_FileOpen() {
         }
     }
 
-    ui->tableWidget_people->setSortingEnabled(true);
+    ui->tableWidget_AthletesList->setSortingEnabled(true);
 }
 
 void gMainWidget::slotButton_FileSave() {
@@ -392,21 +389,21 @@ void gMainWidget::slotButton_FileSave() {
 
         gXmlNode* node_0 = nullptr;
 
-        { // SEGMENT "group_match"
-            gXmlNode* node_1 = xmlFile.insertNode(node_0, "group_match");
-            gXmlNode* node_2 = xmlFile.insertNode(node_1, "match_name");
-            gXmlNode* node_3 = xmlFile.insertNode(node_1, "match_site");
-            gXmlNode* node_4 = xmlFile.insertNode(node_1, "match_date");
+        { // SEGMENT "group_event"
+            gXmlNode* node_1 = xmlFile.insertNode(node_0, "group_event");
+            gXmlNode* node_2 = xmlFile.insertNode(node_1, "event_name");
+            gXmlNode* node_3 = xmlFile.insertNode(node_1, "event_site");
+            gXmlNode* node_4 = xmlFile.insertNode(node_1, "event_date");
 
-            node_2->text = ui->lineEdit_match_name->text().trimmed();
-            node_3->text = ui->lineEdit_match_site->text().trimmed();
-            node_4->text = ui->lineEdit_match_date->text().trimmed();
+            node_2->text = ui->lineEdit_EventName->text().trimmed();
+            node_3->text = ui->lineEdit_EventSite->text().trimmed();
+            node_4->text = ui->lineEdit_EventDate->text().trimmed();
         }
 
-        { // SEGMENT "group_people"
-            gXmlNode* node_1 = xmlFile.insertNode(node_0, "group_people");
+        { // SEGMENT "group_athlete"
+            gXmlNode* node_1 = xmlFile.insertNode(node_0, "group_athlete");
 
-            const auto* rows = ui->tableWidget_people->rows();
+            const auto* rows = ui->tableWidget_AthletesList->rows();
 
             auto N = rows->count();
             for (decltype(N) i(0); i < N; ++i) {
@@ -440,28 +437,28 @@ void gMainWidget::slotButton_FileSave() {
     }
 }
 
-void gMainWidget::slotButton_MakeKata() {
+void gMainWidget::slotButton_CreateKata() {
     comboBox_ReferencePopulate(ui->comboBox_ReferenceKata, ui->tab_2_kata, "02");
 }
 
-void gMainWidget::slotButton_MakeKumite() {
+void gMainWidget::slotButton_CreateKumite() {
     comboBox_ReferencePopulate(ui->comboBox_ReferenceKumite, ui->tab_3_kumite, "12");
 }
 
 void gMainWidget::slotComboBox_ReferenceKata(const QString& text) {
-    comboBox_ReferenceChanged(ui->tableWidget_peopleKata, text, "02");
+    comboBox_ReferenceChanged(ui->tableWidget_AthletesKata, text, "02");
 }
 
 void gMainWidget::slotComboBox_ReferenceKumite(const QString& text) {
-    comboBox_ReferenceChanged(ui->tableWidget_peopleKumite, text, "12");
+    comboBox_ReferenceChanged(ui->tableWidget_AthletesKumite, text, "12");
 }
 
 void gMainWidget::slotButton_ReorderKata() {
-    tableWidget_ReorderPeople(ui->tableWidget_peopleKata);
+    tableWidget_ReorderPeople(ui->tableWidget_AthletesKata);
 }
 
 void gMainWidget::slotButton_ReorderKumite() {
-    tableWidget_ReorderPeople(ui->tableWidget_peopleKumite);
+    tableWidget_ReorderPeople(ui->tableWidget_AthletesKumite);
 }
 
 void export_sanitizer(QString& selected) {
@@ -490,9 +487,9 @@ void gMainWidget::slotButton_ExportKata() {
         register_xlsx.setDocumentProperty("creator", "Gino Francesco Bogo");
         evaluate_xlsx.setDocumentProperty("creator", "Gino Francesco Bogo");
 
-        const auto& title = ui->lineEdit_match_name->text();
-        tableWidget_ExportRegister(ui->tableWidget_peopleKata, register_xlsx, title, "KATA");
-        tableWidget_ExportEvaluate(ui->tableWidget_peopleKata, evaluate_xlsx, title, "KATA");
+        const auto& title = ui->lineEdit_EventName->text();
+        tableWidget_ExportRegister(ui->tableWidget_AthletesKata, register_xlsx, title, "KATA");
+        tableWidget_ExportEvaluate(ui->tableWidget_AthletesKata, evaluate_xlsx, title, "KATA");
 
         register_xlsx.saveAs(register_filename);
         evaluate_xlsx.saveAs(evaluate_filename);
@@ -502,7 +499,7 @@ void gMainWidget::slotButton_ExportKata() {
 void gMainWidget::slotButton_ExportKumite() {
     const auto reference = "_kumite_ref" + ui->comboBox_ReferenceKumite->currentText();
 
-    if (m_saveExport->show(m_directory, getDocName())) {
+    if (m_saveExport->show(m_directory, getDocName() + reference)) {
         auto selected = m_saveExport->selected;
         export_sanitizer(selected);
 
@@ -515,20 +512,20 @@ void gMainWidget::slotButton_ExportKumite() {
         register_xlsx.setDocumentProperty("creator", "Gino Francesco Bogo");
         evaluate_xlsx.setDocumentProperty("creator", "Gino Francesco Bogo");
 
-        const auto& title = ui->lineEdit_match_name->text();
-        tableWidget_ExportRegister(ui->tableWidget_peopleKumite, register_xlsx, title, "KUMITE");
-        tableWidget_ExportEvaluate(ui->tableWidget_peopleKumite, evaluate_xlsx, title, "KUMITE");
+        const auto& title = ui->lineEdit_EventName->text();
+        tableWidget_ExportRegister(ui->tableWidget_AthletesKumite, register_xlsx, title, "KUMITE");
+        tableWidget_ExportEvaluate(ui->tableWidget_AthletesKumite, evaluate_xlsx, title, "KUMITE");
 
         register_xlsx.saveAs(register_filename);
         evaluate_xlsx.saveAs(evaluate_filename);
     }
 }
 
-void gMainWidget::comboBox_ReferencePopulate(QComboBox* comboBox_people_dst, QWidget* tab_number_dst, const QString& filter) {
+void gMainWidget::comboBox_ReferencePopulate(QComboBox* comboBox_AthletesDst, QWidget* tab_number_dst, const QString& filter) {
 
     QStringList references;
 
-    const auto* rows_src = ui->tableWidget_people->rows();
+    const auto* rows_src = ui->tableWidget_AthletesList->rows();
 
     auto N = rows_src->count();
     for (decltype(N) i(0); i < N; ++i) {
@@ -543,17 +540,17 @@ void gMainWidget::comboBox_ReferencePopulate(QComboBox* comboBox_people_dst, QWi
 
     if (references.count() > 0) {
         references.sort();
-        comboBox_people_dst->clear();
-        comboBox_people_dst->addItems(references);
+        comboBox_AthletesDst->clear();
+        comboBox_AthletesDst->addItems(references);
 
         ui->tabWidget->setCurrentWidget(tab_number_dst);
     }
 }
 
-void gMainWidget::comboBox_ReferenceChanged(gTableWidget* tableWidget_people_dst, const QString& reference, const QString& filter) {
+void gMainWidget::comboBox_ReferenceChanged(gTableWidget* tableWidget_AthletesDst, const QString& reference, const QString& filter) {
 
-    const auto* rows_src = ui->tableWidget_people->rows();
-    auto*       rows_dst = tableWidget_people_dst->rows();
+    const auto* rows_src = ui->tableWidget_AthletesList->rows();
+    auto*       rows_dst = tableWidget_AthletesDst->rows();
 
     rows_dst->clearAll();
 
@@ -580,8 +577,8 @@ void gMainWidget::comboBox_ReferenceChanged(gTableWidget* tableWidget_people_dst
     }
 }
 
-void gMainWidget::tableWidget_ReorderPeople(gTableWidget* tableWidget_people_dst) {
-    auto* rows = tableWidget_people_dst->rows();
+void gMainWidget::tableWidget_ReorderPeople(gTableWidget* tableWidget_AthletesDst) {
+    auto* rows = tableWidget_AthletesDst->rows();
 
     if (rows->count() > 0) {
         auto list = rows->cellsData();
@@ -627,18 +624,18 @@ void gMainWidget::tableWidget_ReorderPeople(gTableWidget* tableWidget_people_dst
     }
 }
 
-void gMainWidget::tableWidget_ExportRegister(gTableWidget*    tableWidget_people_src,
+void gMainWidget::tableWidget_ExportRegister(gTableWidget*    tableWidget_AthletesSrc,
                                              QXlsx::Document& document,
                                              const QString&   title,
                                              const QString&   practice) {
 
-    const auto* rows = tableWidget_people_src->rows();
+    const auto* rows = tableWidget_AthletesSrc->rows();
 
     if (rows->count() > 0) {
         gXlsx::PeopleRecord record;
         record.title    = title;
         record.practice = practice;
-        gXlsx::decodeTableWidget(tableWidget_people_src, record);
+        gXlsx::decodeTableWidget(tableWidget_AthletesSrc, record);
 
         auto mod = (int)record.athletes.count() / gXlsx::max_register_lines;
         auto rem = (int)record.athletes.count() % gXlsx::max_register_lines;
@@ -664,18 +661,18 @@ void gMainWidget::tableWidget_ExportRegister(gTableWidget*    tableWidget_people
     }
 }
 
-void gMainWidget::tableWidget_ExportEvaluate(gTableWidget*    tableWidget_people_src,
+void gMainWidget::tableWidget_ExportEvaluate(gTableWidget*    tableWidget_AthletesSrc,
                                              QXlsx::Document& document,
                                              const QString&   title,
                                              const QString&   practice) {
 
-    const auto* rows = tableWidget_people_src->rows();
+    const auto* rows = tableWidget_AthletesSrc->rows();
 
     if (rows->count() > 0) {
         gXlsx::PeopleRecord record;
         record.title    = title;
         record.practice = practice;
-        gXlsx::decodeTableWidget(tableWidget_people_src, record);
+        gXlsx::decodeTableWidget(tableWidget_AthletesSrc, record);
 
         auto mod = (int)record.athletes.count() / gXlsx::max_evaluate_lines;
         auto rem = (int)record.athletes.count() % gXlsx::max_evaluate_lines;

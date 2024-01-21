@@ -38,8 +38,8 @@ class gMainWidget : public QWidget {
     void slotButton_FileNew();
     void slotButton_FileOpen();
     void slotButton_FileSave();
-    void slotButton_MakeKata();
-    void slotButton_MakeKumite();
+    void slotButton_CreateKata();
+    void slotButton_CreateKumite();
 
     void slotComboBox_ReferenceKata(const QString& text);
     void slotComboBox_ReferenceKumite(const QString& text);
@@ -62,22 +62,22 @@ class gMainWidget : public QWidget {
     void clearTab2_Kata();
     void clearTab3_Kumite();
 
-    void comboBox_ReferencePopulate(QComboBox*     comboBox_people_dst, //
+    void comboBox_ReferencePopulate(QComboBox*     comboBox_AthletesDst, //
                                     QWidget*       tab_number_dst,
                                     const QString& filter);
 
-    void comboBox_ReferenceChanged(gTableWidget*  tableWidget_people_dst, //
+    void comboBox_ReferenceChanged(gTableWidget*  tableWidget_AthletesDst, //
                                    const QString& reference,
                                    const QString& filter);
 
-    static void tableWidget_ReorderPeople(gTableWidget* tableWidget_people_dst);
+    static void tableWidget_ReorderPeople(gTableWidget* tableWidget_AthletesDst);
 
-    static void tableWidget_ExportRegister(gTableWidget*    tableWidget_people_src,
+    static void tableWidget_ExportRegister(gTableWidget*    tableWidget_AthletesSrc,
                                            QXlsx::Document& document,
                                            const QString&   title,
                                            const QString&   practice);
 
-    static void tableWidget_ExportEvaluate(gTableWidget*    tableWidget_people_src,
+    static void tableWidget_ExportEvaluate(gTableWidget*    tableWidget_AthletesSrc,
                                            QXlsx::Document& document,
                                            const QString&   title,
                                            const QString&   practice);
@@ -90,7 +90,7 @@ class gMainWidget : public QWidget {
     gFileDialog* m_saveExport;
     gDateDialog* m_dateDialog;
 
-    const QString m_untitled = "senza_nome";
+    const QString m_untitled = tr("untitled");
     QString       m_document;
     QString       m_directory;
 };

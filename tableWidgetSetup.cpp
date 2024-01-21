@@ -21,60 +21,50 @@
 #include <qnamespace.h>
 #include <qpixmap.h>
 #include <qsize.h>
+#include <qstring.h>
 
-const char* const RANK_MAP[] = {
-    "BIANCA",           //  0
-    "BIANCA-GIALLA",    //  1
-    "GIALLA",           //  2
-    "GIALLA-ARANCIONE", //  3
-    "ARANCIONE",        //  4
-    "ARANCIONE-VERDE",  //  5
-    "VERDE",            //  6
-    "VERDE-BLU",        //  7
-    "BLU",              //  8
-    "BLU-MARRONE",      //  9
-    "MARRONE",          // 10
-    "MARRONE-NERA",     // 11
-    "NERA"              // 12
-};
-
-const QStringList setup_menu_names = {
-    "Aggiungi Atleta",   // Insert
-    "Rimuovi Atleta",    // Remove
-    "Elimina Elenco",    // Clear
-    "Copia Riga",        // Copy
-    "Taglia Riga",       // Cut
-    "Incolla Riga",      // Paste
-    "Sposta Riga Sopra", // Move Up
-    "Sposta Riga Sotto"  // Move Down
+const QStringList RANK_MAP = {
+    QObject::tr("WHITE"),         //  0
+    QObject::tr("WHITE-YELLOW"),  //  1
+    QObject::tr("YELLOW"),        //  2
+    QObject::tr("YELLOW-ORANGE"), //  3
+    QObject::tr("ORANGE"),        //  4
+    QObject::tr("ORANGE-GREEN"),  //  5
+    QObject::tr("GREEN"),         //  6
+    QObject::tr("GREEN-BLUE"),    //  7
+    QObject::tr("BLUE"),          //  8
+    QObject::tr("BLUE-BROWN"),    //  9
+    QObject::tr("BROWN"),         // 10
+    QObject::tr("BROWN-BLACK"),   // 11
+    QObject::tr("BLACK")          // 12
 };
 
 void setupRow_Full(gTableWidgetRow* row_ptr) {
     if (row_ptr != nullptr) {
         // NOTE: automatic downcasting
         QList<gTableWidgetBase*> const items = //
-            {new gTableWidgetItem(row_ptr),    // 0 Cognome
-             new gTableWidgetItem(row_ptr),    // 1 Nome
-             new gTableWidgetDate(row_ptr),    // 2 Data di Nascita
-             new gTableWidgetCBox(row_ptr),    // 3 Categoria
-             new gTableWidgetCBox(row_ptr),    // 4 Grado
-             new gTableWidgetCBox(row_ptr),    // 5 Pratica
-             new gTableWidgetCBox(row_ptr),    // 6 Stile
-             new gTableWidgetItem(row_ptr),    // 7 Società
-             new gTableWidgetItem(row_ptr)};   // 8 Riferimento
+            {new gTableWidgetItem(row_ptr),    // 0 Surname
+             new gTableWidgetItem(row_ptr),    // 1 Name
+             new gTableWidgetDate(row_ptr),    // 2 Birthday
+             new gTableWidgetCBox(row_ptr),    // 3 Category
+             new gTableWidgetCBox(row_ptr),    // 4 Rank
+             new gTableWidgetCBox(row_ptr),    // 5 Practice
+             new gTableWidgetCBox(row_ptr),    // 6 Style
+             new gTableWidgetItem(row_ptr),    // 7 Society
+             new gTableWidgetItem(row_ptr)};   // 8 Reference
 
         items.at(2)->toDate()->setDate("31/12/2016");
 
         items.at(3)->toCBox()->addItems( //
-            {"6 ÷ 8 anni",               //
-             "9 ÷ 10 anni",              //
-             "11 ÷ 12 anni",             //
-             "13 ÷ 14 anni",             //
-             "15 ÷ 17 anni",             //
-             "18 ÷ 21 anni",             //
-             "22 ÷ 35 anni",             //
-             "36 ÷ 45 anni",             //
-             "+45 anni"});
+            {QObject::tr("6 ÷ 8 age"),   //
+             QObject::tr("9 ÷ 10 age"),  //
+             QObject::tr("11 ÷ 12 age"), //
+             QObject::tr("13 ÷ 14 age"), //
+             QObject::tr("15 ÷ 17 age"), //
+             QObject::tr("18 ÷ 21 age"), //
+             QObject::tr("22 ÷ 35 age"), //
+             QObject::tr("36 ÷ 45 age"), //
+             QObject::tr("+45 age")});
 
         items.at(4)->toCBox()->images() = //
             {QPixmap(":/res/images/beld_white.png"),
@@ -113,12 +103,12 @@ void setupRow_Mini(gTableWidgetRow* row_ptr) {
         // NOTE: automatic downcasting
         QList<gTableWidgetBase*> const items = //
             {
-                new gTableWidgetItem(row_ptr), // 0 Cognome
-                new gTableWidgetItem(row_ptr), // 1 Nome
-                new gTableWidgetItem(row_ptr), // 2 Categoria
-                new gTableWidgetIcon(row_ptr), // 3 Grado
-                new gTableWidgetItem(row_ptr), // 4 Società
-                new gTableWidgetItem(row_ptr), // 5 Stile
+                new gTableWidgetItem(row_ptr), // 0 Surname
+                new gTableWidgetItem(row_ptr), // 1 Name
+                new gTableWidgetItem(row_ptr), // 2 Category
+                new gTableWidgetIcon(row_ptr), // 3 Rank
+                new gTableWidgetItem(row_ptr), // 4 Society
+                new gTableWidgetItem(row_ptr), // 5 Style
             };
 
         // items.at(0)->toItem()->setFlags(Qt::ItemIsEnabled);
