@@ -130,6 +130,7 @@ QString gMainWidget::addAppPath(const QString& filename) {
     return getAppPath() + filename;
 }
 
+// NOTE cognitive complexity warning (threshold 25).
 void gMainWidget::openConfig(const QString& filename) {
     gXmlFile xmlFile;
 

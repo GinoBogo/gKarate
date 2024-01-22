@@ -25,4 +25,7 @@
         <file>images/beld_black.png</file>
         <file>images/splash.png</file>
     </qresource>
+    <qresource prefix="/lang">
+        <file>lang/lang_it.qm</file>
+    </qresource>
 </RCC>

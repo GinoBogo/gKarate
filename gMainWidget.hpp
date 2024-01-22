@@ -31,7 +31,7 @@ class gMainWidget : public QWidget {
 
   public:
     gMainWidget(QWidget* parent = nullptr);
-    ~gMainWidget();
+    ~gMainWidget() override;
 
   private slots:
     void slotButton_MatchDate();

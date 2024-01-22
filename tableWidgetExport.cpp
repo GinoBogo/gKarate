@@ -60,7 +60,7 @@ void gXlsx::decodeTableWidget(gTableWidget* src_table, PeopleRecord& dst_record)
     }
 }
 
-// REVIEW the number of function arguments exceeds the limit of 4.
+// REVIEW: the number of function arguments exceeds the limit of 4.
 void merge_cells(QXlsx::Document&     document, //
                  const QXlsx::Format& format,
                  int                  r1,
