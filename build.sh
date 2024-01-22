@@ -11,4 +11,6 @@ echo "path:" $path
 
 cd $path/../build/debug
 
-cmake --build ./ --target all -j8
+bear -- cmake --build ./ --target all -j8
+
+cp compile_commands.json ../../gKarate
