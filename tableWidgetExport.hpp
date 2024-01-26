@@ -14,7 +14,6 @@
 #define TABLEWIDGETEXPORT_HPP
 
 #include "qxlsx/xlsxdocument.h"
-#include "qxlsx/xlsxworkbook.h"
 #include "widgets/gTableWidget.hpp"
 
 #include <QString>
