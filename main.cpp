@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
 
 #if (TEST_LANG_IT == false)
     QLocale locale;
-    if (locale.country() == QLocale::Italy)
+    if (locale.territory() == QLocale::Italy)
 #endif
     {
         if (ts.load(":/res/lang/lang_it.qm")) {
